@@ -1,0 +1,117 @@
+---
+title: "PS15 Section 1"
+output: html_document
+---
+
+
+### REMINDERS
+1. KNIT AS YOU GO!
+2. ALWAYS SET YOUR WORKING DIRECTORY FIRST
+3. MAKE SURE YOU KNOW WHAT YOUR VARIABLES ARE (X and Y)
+4. NEVER CODE IN THE CONSOLE
+5. KEEP ANSWERS/QUESTIONS SEPARATE FOR EASY READING
+
+
+
+### R IS A GIANT CALCULATOR
+```{r}
+1+1
+75*69
+```
+
+
+
+### IMPORT DATA
+First of all, set up your working directory!
+```{r}
+getwd()
+setwd("/home/jovyan/UCSB_POLS15/Section 1/") 
+# We make comments in R by placing a hashtag in front of text.
+
+getwd()
+```
+
+Now we want to load a dataset into R. Here's how you do it. Make sure that when you do this, your data is in the same working directory that you set up before!
+
+
+```{r}
+schooldata <- read.csv("schooldata.csv", header = T)
+```
+
+
+
+### EXPLORE DATASET
+First look at the first 6 lines of our dataset.
+```{r}
+head(schooldata)
+# What can you learn from the result?
+```
+
+Then let us look at the last 6 lines of our dataset.
+```{r}
+tail(schooldata)
+```
+
+Count the number of rows
+```{r}
+nrow(schooldata)
+```
+
+Count the number of columns
+```{r}
+ncol(schooldata)
+```
+
+
+
+### EXPLORE DATA PATTERN (FOR ONE VARIABLE)
+1. The range of students' language scores
+```{r}
+range(schooldata$language_score)
+```
+
+2. The minimum and maximum of the language scores
+```{r}
+min(schooldata$language_score)
+max(schooldata$language_score)
+```
+
+3. Actually, we have an easier way to explore the pattern of the variable language score
+```{r}
+summary(schooldata)
+summary(schooldata$language_score)
+```
+
+4. Let us visualize the distribution of the variable that we are interested in.
+```{r}
+hist(schooldata$language_score)
+# To make a more precise graph, we can add arguments to our code
+hist(schooldata$language_score,      
+     xlab = "Language Score", 
+     main = "A Histogram of Students' Language Score",
+     col = "red")
+hist(schooldata$language_score, 
+     xlab = "Language Score", 
+     main = "A Histogram of Students' Language Score",
+     col = "blue", breaks = 5)
+```
+
+
+
+### EXPLORE THE RELATIONSHIP BETWEEN TWO VARIABLES
+Let's make a simple scatterplot with absences on the horizontal axis (x-axis), and math scores on the vertical axis (y-axis), with labels.
+
+We now estimate a regression (looking at the relationship between variables). Let's add a regression line based on the linear regression model, in order to look at the effect of the IV (Independent variable) on the DV (Dependent Variable).
+
+```{r}
+model <- lm(schooldata$math_score ~ schooldata$absences,
+            data = schooldata)
+plot(schooldata$absences, schooldata$math_score, 
+     xlab = "Absences",
+     ylab = "Math Scores", 
+     main = "Math Scores based on Number of Absences")
+abline(model, col="red") 
+# What type of relationship exists between math scores and attendance?
+
+summary(model)
+```
