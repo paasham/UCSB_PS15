@@ -1,0 +1,31 @@
+---
+title: "How to edit text in Rmarkdown"
+author: "Shanshan Lu"
+date: "April 12, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+###How to Edit Text in RMarkdown
+1. Hashtag represents $headline$.
+2. The number of hashtags determines the size of font in the headline. 
+3. A pair of dollar marks ($) emphasizes the content within symbols. 
+
+
+####Tips
+
+* 1. Make a list with one * 
+* 2. **headers**--Place one or more hastages at the start of a line that will be a header (or sub-header). 
+* 3. **italicized and bold text**--Surround italicized text with one asterisk, like *without realizing it*. Surround bold text with two asterisks, like **easy to use**.
+* 4. **list**--Group lines into bullet points that begin with asterisks. Leave a blank line before the first bullet.
+* 5. **hyperlinks**--Surround links with brackets, and then provide the link target in parenthese, like `[Github](www.github.com)`.
+* 6. **Starting a new paragraph**--End a line with two or more spaces. type in two $spaces$ and $return$ at the end of last sentance.  
+For example:  
+I am Shanshan Lu.
+I am a PhD student.  
+I am a PhD student.  
+
+
