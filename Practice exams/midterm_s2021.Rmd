@@ -1,0 +1,118 @@
+---
+title: "PS 15 Midterm Exam"
+author: "Prof. Mahdavi"
+date: "Spring 2021"
+output: html_document
+---
+
+TIME LIMITS: YOU HAVE 18 HOURS TO COMPLETE THIS EXAM.
+YOU MUST SUBMIT YOUR CODE AND HTML FILE TO GAUCHOSPACE BY 12:00PM ON TUESDAY MAY 4TH.
+
+
+RULES:
+YOU MAY USE THE INTERNET, AND ANY MATERIAL FROM THE COURSE.
+NO EMAIL, PHONE, OR COMMUNICATION WITH ANYONE (INCLUDING TAs) ABOUT THE MIDTERM DURING THE 18-HOUR WINDOW.
+FAILURE TO FOLLOW THIS RULE LEADS TO A ZERO IN THE COURSE.
+
+PLEASE WRITE YOUR CODE AND YOUR TEXT ANSWER BELOW EACH QUESTION IN THE CODE CHUNK AND THE SPACE MARKED *Answer:* 
+
+Q1, Q2, AND Q6 ONLY INVOLVE CODE, SO WRITE YOUR ANSWER INSIDE THE PROVIDED CODE CHUNK
+
+
+### Income and Turnout
+
+A classic finding in American Politics is that individuals with higher incomes tend to participate more in politics (Verba, Schlozman, and Brady 1995). Let's investigate whether this is true at the Congressional District level: do districts with higher average incomes have higher turnout? 
+
+Our data come from the 2018 election and are located in the file `midterm.RData`, and the dataset within that file is named `voting`. Here is a brief description of the variables:
+
+* state - full state name
+* district - district number (0 means it is At-large, like in Alaska or Wyoming)
+* hhincome - average household income, in US dollars
+* turnout - percentage of the voting-age population that voted in the election, ranging from 0 to 100.
+
+Q1. Set your working directory and load the dataset `midterm.RData`. **(1 pt total)**
+
+```{r}
+
+```
+
+
+Q2. It's always good practice to begin by looking at and summarizing your data. **(3 pts total)** 
+What is your sample size? *(1 pt.)*
+What is the mean value of `turnout`? *(1 pt.)*
+What is the standard deviation of this variable? *(1 pt.)*
+
+```{r}
+
+```
+
+
+
+Q3. Now let's look at the distribution of this variable. **(2 pts total)**
+Use the `plot(density())` command to plot the distribution. *(1 pt.)*
+Interpret the density plot - how could you describe this distribution? *(1 pt.)*
+
+```{r}
+
+```
+
+*Q3 Answer: *
+
+
+Q4. Now let's examine the association between `hhincome` and `turnout`. **(2 pts total)**
+What is the covariance of `hhincome` and `turnout`? *(1 pt.)*
+What is the correlation? *(1 pt.)*
+
+```{r}
+
+```
+
+*Q4 Answer: *
+
+
+Q5. You want to know whether household income predicts turnout. **(4 pts total)**
+In this case, what is your independent variable? *(1 pt.)* 
+What is your dependent variable? *(1 pt.)*
+State your null hypothesis. *(1 pt.)* 
+State your alternative hypothesis. *(1 pt.)*
+
+*Q5 Answer: *
+
+
+Q6. Plot the relationship between household income and turnout using a scatterplot. For full credit, you must label all axes in your graph, including the title. **(1 pt total)**
+
+```{r}
+
+```
+
+
+Q7. Run a regression that shows this relationship between household income and turnout. **(3 pts total)**
+Show the output of the regression. *(1 pt.)*
+Substantively interpret the coefficient that shows this relationship between your two variables. *(1 pt.)*
+Interpret your p-value. *(1 pt.)*
+
+```{r}
+
+```
+
+*Q7 Answer: *
+
+
+Q8. Intepret your findings in terms of your hypotheses. Did you find evidence for or against the null hypothesis? **(2 pts total)**
+
+*Q8 Answer: *
+
+
+Q9. Can you say that we have identified a causal relationship between household income and turnout? Why or why not? **(3 pts total)**
+
+*Q9 Answer: *
+
+
+Q10. We read an article this week by Kalla \& Broockman. (3 sentences, 100 words max) **(4 pts total)**
+What is their research question? *(1 pt.)*
+What do they find? *(1 pt.)*
+Are they able to infer a causal effect? *(1 pt.)*
+Why or why not? *(1 pt.)*
+
+*Q10 Answer: *
+
