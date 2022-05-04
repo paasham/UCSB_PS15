@@ -1,0 +1,131 @@
+---
+title: "Midterm Exam"
+author: "Prof. Mahdavi"
+date: "Spring 2022"
+output: html_document
+---
+
+TIME LIMITS:
+YOU HAVE 75 MINUTES TO COMPLETE THIS EXAM, STARTING FROM 11:00AM UNTIL 12:15PM.
+
+YOU MUST SUBMIT YOUR CODE AND HTML FILE ON GAUCHOSPACE BY 12:15PM PACIFIC TIME ON WEDNESDAY MAY 4TH.
+
+**If you cannot knit your code for any reason, you should still submit your code (.Rmd) file to Gauchospace. Submissions without a knitted HTML file will incur a 2-point penalty.**
+
+RULES:
+YOU MAY USE THE INTERNET AND ANY MATERIAL FROM THE COURSE.
+NO EMAIL, PHONE, OR COMMUNICATION WITH ANYONE ABOUT THE MIDTERM DURING THE 75-MINUTE WINDOW.
+FAILURE TO FOLLOW THIS RULE LEADS TO A ZERO IN THE COURSE.
+
+PLEASE WRITE YOUR CODE AND YOUR TEXT ANSWER BELOW EACH QUESTION IN THE CODE CHUNK AND THE SPACE MARKED *Answer:* 
+
+Q1, Q2, Q5 AND Q7 ONLY INVOLVE CODE, SO WRITE YOUR ANSWER INSIDE THE PROVIDED CODE CHUNK
+
+### Oil wealth and gasoline taxes
+
+What explains the differences in gasoline taxes around the world? In Turkey, a liter of gasoline is taxed at \$1.67 *above* market price, while in Venezuela a liter of gasoline sells for \$0.66 *below* market price. Prof. Mahdavi and co-authors conducted a study to measure every country's average gasoline tax across the 2000-2015 time period. They argue that a country's dependence on oil and natural gas revenues, measured as oil income as a share of GDP, explains the variation in gasoline taxes. The hypothesis is that oil-rich countries like Saudi Arabia and Angola have the lowest gasoline taxes, while oil-poor countries like Singapore and Ireland have the highest gasoline taxes. 
+
+Download the dataset, `fuel.RData`, which you'll find in the Midterm working directory of the RStudio online platform. Here is a brief description of the variables:
+
+* country - country name
+* fuelincome - average oil income, measured as percentage of national income (% of GDP)
+* gastax - average gasoline tax, measured in US dollars per liter (USD/L)
+
+Q1. Set your working directory and load the dataset `fuel.RData` (and make sure you are capitalizing both the `R` and the `D` in `.RData`). **(1 pt total)**
+
+```{r}
+
+```
+
+
+Q2. It's always good practice to begin by looking at and summarizing your data. **(2 pts total)** 
+
+What is your sample size? *(0.5 pt.)*
+What is the mean value of `fuelincome`? *(0.5 pt.)*
+What is the median value of `fuelincome`? *(0.5 pt.)*
+What is the variance of `fuelincome`? *(0.5 pt.)*
+
+```{r}
+
+```
+
+
+Q3. Let's think about variance in more detail. **(3 pts total)**
+
+What is the mathematical formula for population variance, using the notation of expectations (e.g., $E[X]$)? *(1 pt.)*
+How would you describe the concept of variance in one sentence? *(1 pt.)*
+What happens to the sample variance of a random variable if the sample size increases, holding everything else fixed? *(1 pt.)*
+
+*Q3 Answer: *
+
+
+Q4. Now let's look at the distribution of `fuelincome`. **(2 pts total)**
+
+Plot the distribution using a histogram. *(1 pt.)*
+Interpret the histogram - how could you describe this distribution in words? *(1 pt.)*
+
+```{r}
+
+```
+
+*Q4 Answer: *
+
+
+Q5. Now let's examine the association between `fuelincome` and `gastax`. **(1 pt total)**
+
+What is the covariance between `fuelincome` and `gastax`? *(0.5 pt.)*
+What is the correlation? *(0.5 pt.)*
+
+```{r}
+
+```
+
+
+Q6. You want to know whether fuel income predicts gasoline taxes. **(3 pts total)**
+
+In this case, what is your independent variable? *(0.5 pt.)* 
+What is your dependent variable? *(0.5 pt.)*
+State your null hypothesis. *(1 pt.)* 
+State your alternative hypothesis. *(1 pt.)*
+
+*Q6 Answer: *
+
+
+Q7. Plot the relationship between fuel income and gasoline taxes using a scatterplot. For full credit, you must label all axes in your graph, including the title. **(1 pt total)**
+
+```{r}
+
+```
+
+
+Q8. Run a regression that shows the relationship between fuel income and gasoline taxes, using the model specification in Q6. **(3 pts total)**
+
+Show the output of the regression. *(1 pt.)*
+Substantively interpret the coefficient that shows this relationship between your two variables. *(1 pt.)*
+Interpret your p-value. *(1 pt.)*
+
+```{r}
+
+```
+
+*Q8 Answer: *
+
+
+Q9. Intepret your findings in terms of your hypotheses. Did you find evidence for or against the null hypothesis? **(2 pts total)**
+
+*Q9 Answer: *
+
+
+Q10. Can you say that we have identified a causal relationship between fuel income and gasoline taxes? Why or why not? **(4 pts total)**
+
+*Q10 Answer: *
+
+
+Q11. We read an article this week by Kalla \& Broockman. (4 sentences, 100 words max) **(3 pts total)**
+
+What is their research question? *(0.5 pt.)*
+What do they find? *(1 pt.)*
+Are they able to infer a causal effect? *(0.5 pt.)*
+Why or why not? *(1 pt.)*
+
+*Q11 Answer: *
