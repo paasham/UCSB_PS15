@@ -1,0 +1,91 @@
+---
+title: "Problem Set 4 (Due 19 May)"
+author: "Prof. Paasha Mahdavi, PS 15, UCSB"
+date: "Spring 2022"
+output: html_document
+---
+
+*Submit your HTML output and .Rmd file to Gauchospace by the deadline.*
+
+# Introduction: Reminders about R and Rmarkdown
+
+It is best to work will small amounts of code at a time: get some code working, copy it into the rmd as a code chunk, write your text answer (outside the code chunk) if needed, and check that the file will still knit properly. Do not proceed to answer more questions until you get the first bit working. If you knit everytime you try to write some new code, you'll know where the error is (in the last thing you did!) This will save you huge headaches. 
+
+Although the questions break up each task for you into parts, remember that you might need to put a bunch of code together into a single chunk to make it work. For example, if you create a density plot in one part of a question, and want to add the mean value to it as a line in another part, you need these two commands to follow one another in the same chunk of code.
+
+Some tips: Start early, use the discussion forum, rewatch lecture videos, attend sections, go to office hours if you need to, read the textbook and other readings -- do all these things and you'll succeed! Good luck.
+
+
+***
+## Question 1. Political instability and regime type (5 points total)
+
+The relationship between political instability and democracy is important and likely quite complicated. Do democracies manage conflict in a way that reduces instability or do they stir up conflict? Let's take a crack at this problem using the `instability.dta` data set from Zaryab Iqbal and Christopher Zorn. The data set covers 157 countries between 1946 and 1997. The unit of observation is the country-year. Our variables are:
+
+Variable Name  | Description 
+------------- | ------------- 
+ccode | Country code
+year | year
+instab | Index of instability (revolutions, crises, coups etc). Ranges from -4.65 to + 10.07
+coldwar | Cold war year (1=yes, 0=no)
+gdplag | GDP in previous year 
+democracy | Democracy score in previous year, ranges from 0 (most autocratic) to 100 (most democratic)
+
+(a) Load the data set, noting that the data are stored in `.dta` format rather than the typical `.RData` format. You will have to use the `read.dta13()` command from the `readstata13` R package.
+
+(b) Provide a scatterplot with `democracy` on the horizontal access and `instab` on the vertical axis. Add the regression line to this graph. Specifically, regress instability on democracy scores and place the fitted line onto the scatterplot using `abline()`. Show the `summary()` for a bivariate regression model and correctly interpret the results. State your null and alternative hypotheses for this model.
+
+(c) Should the result in 1b be given a causal interpretation? Why or why not? Describe one possible confounder. 
+
+(d) Now we will use multivariate regression to begin addressing some of the possible confounders. In other words, we will build a more complex model.
+
+Suppose we are interested in whether instability was higher or lower during the Cold War. Run a multivariate OLS model that regresses instability on democracy, GDP, and the Cold War dummy. That is, regress `instab` on `democracy`, but controlling for `gdplag` and for `coldwar` by including both variables in the model.
+
+Produce a summary table for your model results and correctly interpret these results. That is:
+
+- Explain the meaning of all the coefficient estimates
+
+- Remark on the significance of each coefficient (except the intercept)
+
+- Most importantly, compared to the previous model, remark on any changes to the estimated coefficient for `democracy` and its statistical significance. What is going on here?
+
+(e) What do you conclude from all of this? Specifically, what do these results make you think about the relationships between these variables?
+
+
+## Question 2. Cellphone bans while driving (4 points)
+
+These data are about traffic related incidents and cell phone usage across US states. We're going to use them to see what we can learn about the relationship between cell phone usage and traffic accidents. The dataset is called `cellphone_data.Rdata`.
+
+The variables are:
+
+Variable Name  | Description 
+------------- | ------------- 
+year    | year        
+state        | state name
+state_numeric | a numeric code for each state
+population        | Population within a state
+numberofdeaths  |  Number of traffic deaths, in the state
+cell_subscription | Number of cellphone subscriptions in state in thousands
+total_miles_driven | Total miles driven within a state for that year (in millions of miles)
+cell_ban  | state has ban on using cellphone while driving
+text_ban  | state has ban on texting while driving
+
+(a) Load the data set and provide a scatterplot with `total_miles_driven` on the horizontal access and `numberofdeaths` on the vertical axis. Add the regression line to this graph. 
+
+(b)  This dataset also tells us if each state has a ban on texting while driving. Look at the variable `cell_ban`. What values can it take? What is the mean and standard deviation for this variable? Given the mean, would you say that most states do or do not have bans on cellphone use? **Bonus (1/2 point)**: What do we call variables like this?
+
+(c)  As a first analysis, you want to know if the mean difference in number of deaths differs in states with and without bans. Get the difference in means, i.e. the mean number of deaths in states with a cellphone ban minus the mean number of deaths in states without cellphone bans. Hint: You need to subset your data using "[ ]"
+
+(d) Get this difference in means again, but by using regression. (You should get the same result -- if you didn't, you made a mistake somewhere.) Interpret the result, including the p-value and significance. 
+
+
+## Question 3. Cellphone bans continued (1 point)
+
+Can you conclude from the model results in Q2 whether cellphone bans work? State why or why not, following the rules we have discussed in class for what this requires of you to argue. 
+
+
+## OPTIONAL Question 4: Practice and Bonus
+
+**Bonus (1/2 point)** Using the data from Q1, predict which countries will experience instability by regresses instability on democracy, GDP, and the Cold War dummy. Use the $R^2$ statistic reported by the model (the "Adjusted R-squared" is fine) to describe how well the model works in terms of the variance of $Y$ that is ``explained'' by the model. 
+
+**Bonus (1/2 point)** Get the predicted values (probabilities) from your model for each observation.  There are multiple ways of doing this, as we discussed in class, and you can use any of them you would like (google to figure out the coding options). Choose one variable that you had included in your model and use it to create a scatter plot that has that variable for the horizontal axis and the predicted probability of `instab` for the vertical axis.
+
