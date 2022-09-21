@@ -25,7 +25,7 @@ output: html_document
 First of all, set up your working directory!
 ```{r}
 getwd()
-setwd("/home/jovyan/UCSB_POLS15/Section 1/") 
+setwd("/home/jovyan/UCSB_PS15/Section 1/") 
 # We make comments in R by placing a hashtag in front of text.
 
 getwd()
@@ -104,8 +104,9 @@ Let's make a simple scatterplot with absences on the horizontal axis (x-axis), a
 We now estimate a regression (looking at the relationship between variables). Let's add a regression line based on the linear regression model, in order to look at the effect of the IV (Independent variable) on the DV (Dependent Variable).
 
 ```{r}
-model <- lm(schooldata$math_score ~ schooldata$absences,
+model <- lm(math_score ~ absences,
             data = schooldata)
+            
 plot(schooldata$absences, schooldata$math_score, 
      xlab = "Absences",
      ylab = "Math Scores", 
