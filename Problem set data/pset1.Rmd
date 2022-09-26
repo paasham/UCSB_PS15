@@ -58,7 +58,7 @@ Okay, your turn to answer the remaining questions!
 
 Start by reading **Chapter 1** of the textbook, *Real Stats*. You can also review your lecture notes.
 
-Q1. A researcher observes that rural people vote at a higher rate. Ahe decides to publish a research article that says living in a rural setting causes people to participate in elections at a higher rate. Would you like to be a co-author on this paper? Why or why not? (100 words max)
+Q1. A researcher observes that rural people vote at a higher rate. She decides to publish a research article that says living in a rural setting causes people to participate in elections at a higher rate. Would you like to be a co-author on this paper? Why or why not? (100 words max)
 
 Q2. Explain what this sentence means: "Experiments create exogeneity via randomization." (75 words max)
 
@@ -82,7 +82,7 @@ When James Carville was crafting a simple catchphrase to summarize then-presiden
 
 The Presidential Voteshare database from 1948--2012 offers a chance to evaluate this hypothesis. 
 
-Download the dataset, `presvote.Rdata`, which you'll find on the course website. You may want to put it in your working directory to make it easy to find (use `getwd()` to see what your current working directory is; you can use the Session menu in Rstudio or the `setwd()` command to change your working directory.)
+Download the dataset, `presdata.RData`, which you'll find on the course website. You may want to put it in your working directory to make it easy to find (use `getwd()` to see what your current working directory is; you can use the Session menu in Rstudio or the `setwd()` command to change your working directory.)
 
 Here is a brief description of the variables:
 
@@ -94,7 +94,7 @@ Here is a brief description of the variables:
 * repcand - name of the Republican presidential candidate
 * reelection - indicator for whether the presidential candidate is running for reelection (1) or not (0)
 
-*As will often be the case when using R, you will need to use the `$` operator to access these variables within the object. Specifically, once you have loaded presvote.RData, the result will be available in the data `presdata`.  To get at the variable `vote`, for example, you would use `presdata$vote`. Remember, the end of each chapter in the textbook includes R code that can be helpful. We also posted R resources on Gauchospace.*
+*As will often be the case when using R, you will need to use the `$` operator to access these variables within the object. Specifically, once you have loaded presdata.RData, the result will be available in the data `presdata`.  To get at the variable `vote`, for example, you would use `presdata$vote`. Remember, the end of each chapter in the textbook includes R code that can be helpful. We also posted R resources on Gauchospace.*
 
 Q1. Load the data into R. The data are stored as an Rdata file, so you can use the `load()` function to load it. 
 
