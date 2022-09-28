@@ -76,13 +76,13 @@ list(schooldata$language_score)
 
 
 ### EXERCISE
-Now let's practise!  
+Now let's practice!  
 1. What is the minimum language score?  
 2. What is the maximum language score?  
 3. What is the range of the language scores?  
 4. What is the average of the language scores?
 ```{r}
-# PLEASE CODE HERE!
+# PLEASE WRITE YOUR CODE IN THIS CODE CHUNK!
 
 ```
 
