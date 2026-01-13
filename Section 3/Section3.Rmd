@@ -1,0 +1,180 @@
+---
+title: "POLS 15 -- Section 3"
+author: "Hunter C. Smith"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### Setup
+
+Remember to always clear your environment, set your working directory, and load your dataset (today it's `terror.csv`, name the dataset object "terror"):
+
+```{r}
+# Type your code here!
+```
+
+### Understand Your Dataset
+
+As always, we should begin by getting our sample size and number of variables -- do that below.
+
+```{r}
+# Type your code here!
+```
+
+We should also get the names of the variables in our dataset, since we might not know them at first. You can use any of the following three commands to get a list of variable names from a dataset:
+
+```{r}
+names(terror)
+variable.names(terror)
+colnames(terror)
+```
+
+### Descriptive Statistics
+
+Let's begin with the `Number.Killed` variable. Estimate the mean and median values.
+
+```{r}
+# Type your code here!
+```
+
+There are both measures of central tendency, but we haven't yet talked about measures of dispersion (a.k.a., measures of spread). These are variance and standard deviation, and like the other summary statistics you know, they have their own commands.
+
+```{r}
+var(terror$Number.Killed)
+
+sd(terror$Number.Killed)
+```
+
+Or, if you wanted, you could calculate them by typing our their formulae using code:
+
+```{r}
+sum((terror$Number.Killed - mean(terror$Number.Killed))^2)/(nrow(terror)-1)
+
+sqrt(sum((terror$Number.Killed - mean(terror$Number.Killed))^2)/(nrow(terror)-1))
+```
+
+or by converting the output of one command into the other:
+
+```{r}
+sd(terror$Number.Killed)^2 
+
+sqrt(var(terror$Number.Killed)) 
+```
+
+### Distribution Plots
+
+We've already talked about making histograms to understand a variable's distribution, so go ahead and make a simple histogram of the `Number.Killed` variable.
+
+```{r}
+# Type your code here!
+```
+
+This isn't the only plot we can use, though. A density plot will also show you data distributions, but instead of collapsing observations into bins, it displays a single continuous line mapping the distribution.
+
+```{r}
+plot(density(x = terror$Number.Killed), # Notice that we're nesting commands, and only the variable name goes in the density command
+     xlab = "Number Killed",
+     main = "Distribution of Number Killed",
+     col = "blue",
+     lwd = 2
+     )
+```
+
+We can also create a boxplot, which gives us a different visual display of the distribution.
+
+```{r}
+boxplot(x = terror$Number.Killed,
+        horizontal = TRUE, # R defaults to displaying boxplots vertically, but setting this argument TRUE makes them horizontal
+        xlab = "Number Killed",
+        main = "Distribution of Number Killed"
+        )
+```
+
+It's also useful to add some of our summary statistics to our distribution plots. Let's add mean and median values to the density plot.
+
+```{r}
+# The same density plot we just created
+plot(density(x = terror$Number.Killed),
+     xlab = "Number Killed",
+     main = "Distribution of Number Killed",
+     col = "blue",
+     lwd = 2
+     )
+
+# Adding the mean line
+abline(v = mean(terror$Number.Killed), # Set v equal to the value where you want a vertical line
+       lty = 2, # Different values = different line patterns
+       lwd = 2,
+       col = "blue"
+       )
+
+# Adding the median line -- change the pattern and color
+abline(v = median(terror$Number.Killed),
+       lty = 4,
+       lwd = 2,
+       col = "purple"
+       )
+
+# Adding a legend to denote the lines
+legend("topright", # Where you want the legend
+       legend = c("mean", "median"), # c() creates an ordered list of labels
+       lty = c(2, 4), # Now distinguish any aspects of your line that are different, using the same order as the labels in the legend argument
+       col = c("blue", "purple")
+       )
+```
+
+### Computations
+
+Sometimes, we might have reason to believe that patterns in our data aren't consistent across all values of a variable. One way we can assess this is with conditional means. We'll discuss to ways to get these conditional means -- one where we create data subsets, and one where we alter the `mean()` command itself.
+
+We can separate the original dataset using a logical statement. These are things that evaluate to TRUE or FALSE. Below are some of the symbols you can use in logical statements:
+
+`==` means "exactly equal to"
+`!=` means "not equal to"
+`<=` means "less than or equal to"
+`>=` means "greater than or equal to"
+`|` means "or"
+`&` means "and"
+
+Now, let's create data subsets based on whether an observation has more or less than 7 terror incidents.
+
+```{r}
+hiterror <- terror[which(terror$Number.of.Incidents>7), ] 
+loterror <- terror[which(terror$Number.of.Incidents<=7), ]
+```
+
+Square brackets will ALWAYS denote some kind of subsetting is occurring. Here, if an observation has more than 7 incidents, it's sorted into the `hiterror` subset. Otherwise, it is sorted into `loterror`. Now that we have the two subsets, we can see whether the mean number killed differs according to the number of incidents.
+
+```{r}
+mean(hiterror$Number.Killed)
+mean(loterror$Number.Killed)
+```
+
+We can also calculate and report the difference between the two.
+
+```{r}
+kill.diff <- mean(hiterror$Number.Killed) - mean(loterror$Number.Killed) # This line calculates the difference and saves it under a name
+kill.diff # This line prints the value in your output
+```
+
+Now, let's do it the easier way -- by subsetting within the mean command itself. Begin by doing the mean of whatever variable you want, then open a set of square brackets, then type in your logical statement.
+
+```{r}
+mean(terror$Number.Killed[terror$Number.of.Incidents>7])
+
+mean(terror$Number.Killed[terror$Number.of.Incidents<=7])
+
+mean(terror$Number.Killed[terror$Number.of.Incidents>7]) - mean(terror$Number.Killed[terror$Number.of.Incidents<=7])
+```
+
+### Do It Yourself!
+
+The difference in our subsets suggests that there might be a relationship between these variables. Let's examine that hypothesis by creating a scatterplot between the variables, estimating a regression model, and adding the regression line to the scatterplot. What does this plot suggest about the relationship between the number of terror incidents and the number of deaths from terror incidents?
+
+```{r}
+# Type your code here!
+```
+
+### Knit to HTML
+
+Always remember to knit your file when you finish anything!

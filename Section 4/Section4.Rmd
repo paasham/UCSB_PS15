@@ -1,0 +1,76 @@
+---
+title: "POLS 15 -- Section 4"
+author: "Hunter C. Smith"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### Setup
+
+Remember to always clear your environment, set your working directory, and load your dataset (today it's `lungcapdata.csv`, name the dataset object "lungdata"):
+
+```{r}
+# Type your code here!
+```
+
+### Do It Yourself!
+
+Let's practice some skills you already know regarding bivariate relationships. Today, our independent (x) variable will be `Age` and our dependent (y) variable will be `LungCap`. Make a scatterplot of these variables, estimate a regression model (remember to save it as an object in your environment), and add the regression line to your plot. What does this suggest about the relationship between age and lung capacity?
+
+```{r}
+# Type your code here!
+```
+
+### Correlation and Covariance
+
+We now know the direction of the relationship, but that's about it. Covariance and correlation estimates can help us understand this relationship even more. We can estimate covariance with `cov()` and correlation with `cor()`, with the arguments being the two variables we're using (the order doesn't matter). What do the covariance and correlation values below communicate about the relationship between age and lung capacity?
+
+```{r}
+cov(lungdata$Age, lungdata$LungCap)
+cor(lungdata$Age, lungdata$LungCap)
+```
+
+### Mathematical Notation in `R`
+
+Occasionally, you'll want to write out some mathematical formulae in `R`. Thankfully, that's pretty easy to do! Most frequently, we'll be writing out the regression models we're estimating. Here's how you write out a basic bivariate regression model:
+
+$$Y_i = \beta_0 + \beta_1 X_i + \epsilon_i$$
+
+The most important thing is that your mathematical notation is contained within a set of dollar signs. As you saw above, using two dollar signs on either end tabs down a line and centers the formula, while a single dollar sign will insert the formula in-line: $Y_i = \beta_0 + \beta_1 X_i + \epsilon_i$. You can hover your mouse over the equation to see how it will appear in yout knitted file.
+
+The formulae above show the theoretical regression model; once we actually estimate it, we have to change the formula to the following:
+
+$$\hat{Y_i} = \hat{\beta_0} + \hat{\beta_1} X_i$$
+
+Note that $\epsilon_i$ drops out of the estimated model (why is that?). You should also replace $X$ and $Y$ with the actual variables' names. For more examples of mathematical notation that will be useful for problem sets, you can go to the following link: https://rpruim.github.io/s341/S19/from-class/MathinRmd.html
+
+### Interpreting Regression Models
+
+You already know how to estimate a regression model, but we haven't talked about interpreting $\hat{\beta_0}$ and $\hat{\beta_1}$ themselves. Let's re-run the regression model between age and lung capacity and pull up the coefficient table using `summary()`.
+
+```{r}
+mod1 <- lm(LungCap ~ Age, data = lungdata)
+summary(mod1)
+```
+
+There's a lot of information here, but we primarily care about values in the coefficient table. We have rows for the intercept and our X variable (Age) with four columns each: the estimate, the standard error, the $t$-statistic, and the $p$-value. For now, we'll only focus on the estimates column. $\hat{\beta_0}$ is reported in the intercept row, and $\hat{\beta_1}$ is reported in the Age row.
+
+Each of the estimates has a very specific interpretation. $\hat{\beta_0}$ represents the expected value of Y when X is equal to zero. For the example above, we'd interpret $\hat{\beta_0}$ in the following way: "When a person's age is zero years, their lung capacity is estimated to be 1.147 liters." Remember to include the correct units for your variables!
+
+Next, we need to interpret $\hat{\beta_1}$, or the slope of the regression line. The general interpretation template is the following: "A one-unit increase in X is associated with a $\hat{\beta_1}$ unit change in Y." As long as you stick to that wording, you shouldn't have any problems with your interpretations. Now, here's the correct interpretation of our $\hat{\beta_1}$: "A one-year increase in age is associated with a 0.545 liter increase in lung capacity."
+
+### Do It Yourself!
+
+Let's practice our interpretation skills by regressing lung capacity on height. Estimate the regression model, pull up the model summary, and write out your interpretations for $\hat{\beta_0}$ and $\hat{\beta_1}$. If you have time, you can also write out the theoretical and estimated regression formulae using proper mathematical notation.
+
+```{r}
+# Type your code here!
+```
+
+$\hat{\beta_0}$ Interpretation: 
+
+$\hat{\beta_1}$ Interpretation: 
+
+### Knit to HTML
+
+Always remember to knit your file when you finish anything!

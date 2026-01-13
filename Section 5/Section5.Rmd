@@ -1,0 +1,92 @@
+---
+title: "POLS 15 -- Section 5"
+author: "Hunter C. Smith"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+We won't be going over any new code this week. Instead, this is a chance for you to practice the analytical tools we've learned so far in the course to prepare for next week's midterm exam. 
+
+### Choose a Dataset
+
+- `wb.RData`: Data from the World Bank for economic and environmental variables from 2005.
+- `voters.RData`: Data from a 2016 USC / LA Times Presidential Poll of voter demographics and attitudes toward presidential candidates.
+- `nba.RData`: Statistics for NBA teams from 2012-2016.
+
+### Setup
+
+Clear your environment, set your working directory, and upload your dataset of choice.
+
+```{r}
+
+```
+
+### Explore Your Dataset
+
+Identify your sample size, number of variables, and variable names.
+
+```{r}
+
+```
+
+Before moving on, hypothesize a relationship between two variables in your dataset. Which is your IV, and which is your DV?
+
+### Univariate Analysis
+
+For each variable, compute the mean, median, range, and standard deviation. What do these values tell you about the distribution of each variable?
+
+```{r}
+
+```
+
+Now, create a distribution plot for each variable (with appropriate labels). Describe each of the distributions.
+
+```{r}
+
+```
+
+### Bivariate Analysis
+
+Compute the covariance and correlation between your variables and interpret each -- what do they tell you about the relationship?
+
+```{r}
+
+```
+
+Now make a scatterplot of these variables. Is there a clear pattern in the data?
+
+```{r}
+
+```
+
+Write the regression model you'll estimate with these variables using appropriate mathematical notation.
+
+Equation:
+
+Now estimate your regression and add the line to your scatterplot. What does the line suggest about the relationship?
+
+```{r}
+
+```
+
+Finally, pull up the model summary and do the following:
+
+- Interpret $\hat{\beta_0}$.
+- Interpret $\hat{\beta_1}$.
+- Specify your null hypothesis using both mathematical notation and words.
+- Specify your alternate hypothesis using both mathematical notation and words.
+- Interpret the $p$-value for $\hat{\beta_1}$ and state your conclusions regarding significance and your hypotheses.
+- Interpret $R^2$.
+
+```{r}
+
+```
+
+### Bonus -- Heterogeneous Effects
+
+If you have time, choose another variable from your dataset that might influence your results (think back to the example from Week 3 with the terror data). Create a meaningful subset of your data and compare the means of your variables. Does it seem like there may be heterogeneous effects? Try running a regression model to examine this.
+
+```{r}
+
+```
+

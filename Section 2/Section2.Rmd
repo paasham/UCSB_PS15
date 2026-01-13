@@ -1,0 +1,169 @@
+---
+title: "POLS 15 -- Section 2"
+author: "Hunter C. Smith"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### Clearing Your Environment
+
+You probably have all of the data objects we used last week still in your environment. To remove these, use the following line of code (it isn't important that you understand how this code works, just what it does):
+
+```{r}
+rm(list = ls())
+```
+
+You should always start your Markdown files with three commands: (1) clear your environment, (2) set your working directory, and (3) load in your dataset. Go ahead and do that below, loading in `schooldata.csv` that we used last week.
+
+```{r}
+# Type your code here!
+```
+
+### Exploring Your Dataset
+
+Last week, we discussed how important it is to know your sample size and number of variables. We showed you the `head()` and `tail()` commands -- which gives us the number of variables? observations?
+
+```{r}
+nrow(schooldata)
+ncol(schooldata)
+```
+
+We can also use `dim()` to get both pieces of information at once; however, `R` doesn't tell you which is which, so you need to remember that the number of observations comes first, followed by the number of variables.
+
+```{r}
+dim(schooldata)
+```
+
+Also remember that we like estimating summary statistics to better understand our variables' distributions. We discussed several different commands to estimate these, so let's practice them.
+
+In the code chunk below, insert code to get the following for students' math scores:
+- Minimum
+- Maximum
+- Average
+- Median
+
+```{r}
+# Type your code here!
+```
+
+### Generating New Variables
+
+Frequently, datasets might not contain all of the variables we'd like to have. Thankfully, we can calculate our own variables and add them to the dataset! Let's create a value called `diff` equal to the absolute value of the difference between a student's language and math scores:
+
+```{r}
+diff <- abs(schooldata$math_score - schooldata$language_score)
+```
+
+Now, we have a list of values in our environment called `diff` set equal to the calculation we specified. By creating a new name and using the assignment operator `<-`, we store the outcome of what's on the right-hand side to the label on the left-hand side. Now that we have these values, we can treat them just like the variables we originally had in the dataset:
+
+```{r}
+mean(diff)
+min(diff)
+max(diff)
+```
+
+However, we typically like to keep these variables in the dataset with our other variables. The code below completes the exact same calculation, but stores the outcomes as a variable called `difference` inside of `schooldata`:
+
+```{r}
+schooldata$difference <- abs(schooldata$math_score - schooldata$language_score)
+```
+
+And we can estimate the exact same summary statistics that we did using `diff`:
+
+```{r}
+mean(schooldata$difference)
+min(schooldata$difference)
+max(schooldata$difference)
+```
+
+We get the exact same values either way, the only thing that changes is where we store those values.
+
+### Correlations between Variables
+
+So far, we've focused exclusively on univariate analysis -- that is, analysis using a single variable. However, the questions we're interested in as political scientists typically involve two variables. More specifically, we want to see how changes in one variable might influence (or even cause!) changes in another. One of the most basic things we can do is create a scatterplot between two variables. The code below provides an example:
+
+```{r}
+plot(x = schooldata$absences, # Your independent variable
+     y = schooldata$language_score, # Your dependent variable
+     xlab = "Absences", # x-axis label
+     ylab = "Language Scores", # y-axis label
+     main = "Scatterplot of Absences and Language Scores" # Plot title
+     )
+```
+
+Sometimes scatterplots display clear data patterns; other times, they're more murky. To be more certain about the relationship between our IV and DV, we can estimate a regression model (essentially a line of best fit) and add it to our scatterplot. An example is below:
+
+```{r}
+# The same scatterplot we just generated
+plot(x = schooldata$absences,
+     y = schooldata$language_score,
+     xlab = "Absences",
+     ylab = "Language Scores",
+     main = "Scatterplot of Absences and Language Scores"
+     )
+
+# Regression model
+mod1 <- lm(formula = language_score ~ absences, # The formula for your regression model, formatted as "y ~ x"
+           data = schooldata # The name of your dataset
+           )
+
+# Add the regression line to the plot
+abline(mod1, # The name you gave your regression model
+       col = "blue", # A color for the line
+       lwd = 2 # The width of the line; larger numbers = thicker line
+       )
+```
+
+Now, the line is telling us about the relationship between these two variables! Now, try it yourself using `absences` as your independent variable and `math_score` as your dependent variable.
+
+```{r}
+# Type your code here!
+```
+
+### Loading `.RData` Files
+
+So far, we've only used `.csv` data files, but we will also frequently use `.RData` data files in this course. They're a bit easier to use because they were built to cooperate with `R`, so all we need to use the `load()` command -- no new name or assignment operator `<-` necessary.
+
+```{r}
+load(file = "worldbank.RData")
+```
+
+### Plotting Trends over Time
+
+Any time you want to examine the trend of a variable over time, your time variable will be the independent (x) variable. Below, we'll make a scatterplot of CO$_2$ per capita emissions per country by year.
+
+```{r}
+plot(x = worldbank$year,
+     y = worldbank$CO2PerCapita,
+     xlab = "Year",
+     ylab = "CO2 per capita",
+     main = "Global Emissions Per Capita")
+```
+
+Since these are trends over time, you may also want to add a line connecting each of the data points. One way you can do this is by adding a new argument to the `plot()` command:
+
+```{r}
+plot(x = worldbank$year,
+     y = worldbank$CO2PerCapita,
+     xlab = "Year",
+     ylab = "CO2 per capita",
+     main = "Global Emissions Per Capita",
+     type = "b" # Setting type = "b" adds lines between observations
+     )
+```
+
+You can also use the `lines()` command after you generate the scatterplot:
+
+```{r}
+plot(x = worldbank$year,
+     y = worldbank$CO2PerCapita,
+     xlab = "Year",
+     ylab = "CO2 per capita",
+     main = "Global Emissions Per Capita")
+lines(x = worldbank$year,
+      y = worldbank$CO2PerCapita)
+```
+
+### Knit to HTML
+
+Always remember to knit your file once you finish everything!
