@@ -1,0 +1,124 @@
+---
+title: "POLS 15 -- Section 7"
+author: "Hunter C. Smith"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### DIY Setup
+
+As always, clear your environment, set your working directory, and load in today's data file, `nba_Sec7.RData`.
+
+```{r}
+# Type your code here!
+```
+
+Here's a description of the variables we'll be using today:
+
+Variable Name         | Description      
+--------------------- | -----------------------------------------      
+`ThreePerc`             |  The share of 3 point shots that were successfully made.      
+`Wlperc`                |  The win-loss proportion for the given team in the given year.  
+`BLK`                   | The total number of shots blocked by the given team in a season. 
+`Attendance`            | The total number of fans that attended the given team's games during the season. 
+
+### Variable Transformations
+
+Some of the variables we're using are recorded as proportions (between 0 and 1), but they're much easier to interpret as percentages. Let's recode the original versions into percentages using simple multiplication.
+
+```{r}
+nba$ThreePerc <- nba$ThreePerc * 100
+nba$Wlperc <- nba$Wlperc * 100
+```
+
+### Do It Yourself -- Scatterplot
+
+Make a scatterplot with `ThreePerc` as your IV and `Wlperc` as your DV, then add a regression line. What does this line suggest about the relationship?
+
+```{r}
+# Type your code here!
+```
+
+### Do It Yourself -- Bivariate Regression
+
+Now, pull up your model summary. Interpret both of your coefficient estimates ($\hat{\beta_0}$ and $\hat{\beta_1}$), and discuss your conclusions vis-à-vis statistical significance and the null hypothesis for $\hat{\beta_1}$. 
+
+```{r}
+# Type your code here!
+```
+
+$\hat{\beta_0}$ Interpretation:
+
+$\hat{\beta_1}$ Interpretation:
+
+$\hat{\beta_1}$ Significance:
+
+Bonus: Can you compute the upper and lower bounds of a 95% confidence interval for $\hat{\beta_1}$?
+
+### Multivariate Regression
+
+More often than not, we'll want to include more than one independent variable in our regression models. Why is this? Adding additional variables reduces the bias and increases the precision of our estimates, meaning that our estimates are, on average, closer to their true value, or the parameter. In essence, we are pulling factors out of the error term, $\epsilon_i$, and putting them in the model instead.
+
+Thankfully, adding more variables is easy from a coding perspective. We start `lm()` the same way, by listing our dependent variable followed by a tilde `~`, but then we list all of the independent variables separated by plus signs, `+`. Let's add the variable `BLK` to the model.
+
+```{r}
+mod2 <- lm(Wlperc ~ ThreePerc + BLK, data = nba)
+summary(mod2)
+```
+
+The interpretations of our coefficients changes slightly in the multivariate context.
+
+For the intercept: "When *ALL* X variables are equal to zero, the Y variable is predicted to be $\hat{\beta_0}$.
+
+For the slope coefficients (any coefficient multiplied by an X variable): "A one-unit change in X is associated with a $\hat{\beta_n}$ change in Y, *holding all other variables constant / ceteris paribus / all else being equal.* (Pick your favorite way to end this sentence).
+
+Try it out yourself! Write your interpretations of each estimate below.
+
+$\hat{\beta_0}$:
+
+$\hat{\beta_1}$:
+
+$\hat{\beta_2}$:
+
+We also need to interpret the significance of our slope coefficients. The process is the same, but the hypotheses change slightly from variable to variable (how exactly?). What are your conclusions for these estimates?
+
+$\hat{\beta_1}$:
+
+$\hat{\beta_2}$:
+
+The way we interpret $R^2$ also changes slightly, as it now tells us the proportion of the observed variation in Y that's accounted for by *all* X variables *jointly*. In the example above, $R^2$ = 0.3565, indicating that accounting for both successful three-pointers and blocking explains about 35.65% of the observed variation in win-loss percentages.
+
+Let's add one additional variable to the model, `Attendance`, and interpret the slope coefficient estimates (coefficient & significance).
+
+```{r}
+mod3 <- lm(Wlperc ~ ThreePerc + BLK + Attendance, data = nba)
+summary(mod3)
+```
+
+$\hat{\beta_1}$:
+
+$\hat{\beta_2}$:
+
+$\hat{\beta_3}$:
+
+### Estimate Robustness
+
+One thing we should consider when iterating on multivariate models is the robustness of our estimates -- i.e., how consistent the estimates are in terms of direction, magnitude, and significance. Let's focus on `ThreePerc` because it was in all three of our models. Here are the coefficients on `ThreePerc` by model:
+
+Model 1: $\hat{\beta_1}$ = 4.63, $p$ = 1.45e-14
+Model 2: $\hat{\beta_1}$ = 4.37, $p$ = 2.49e-13
+Model 3: $\hat{\beta_1}$ = 3.89, $p$ = 1.31e-10
+
+How do these estimates compare across our three dimensions?
+
+Direction: All coefficients are positive, so directionality is consistent across model specifications.
+
+Magnitude: Changes a bit across model specifications, decreasing by ~0.74. Seems to indicate endogeneity, which should be expected in this scenario (why?).
+
+Significance: $p$-values do change across model specifications, but remain statistically significant at a high level (more than $\alpha$ = 0.001), so fairly consistent.
+
+Overall, the estimates maintain directionality and significance, but the magnitude does change slightly from model to model. Is it enough to say that this estimate isn't robust to alternative model specifications? Maybe -- you could probably argue either way. This is where the art (rather than the science) of data analysis and research begins coming into play!
+
+### Knit to HTML
+
+Always remember to knit your file when you finish anything!

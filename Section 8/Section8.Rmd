@@ -1,0 +1,162 @@
+---
+title: "POLS 15 -- Section 8"
+author: "Hunter C. Smith"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### DIY Setup
+
+As always, clear your environment, set your working directory, and load in today's data file, `vote_data.RData`.
+
+```{r}
+# Type your code here!
+```
+
+Here's a description of the variables we'll be using today:
+
+Variable Name  | Description 
+-------------  | ------------------------------------------------------------------ 
+`year`           | year of the election
+`idno`           | unique ICPSR identifier for each incumbent
+`ov`             | the share of two-party votes for the incumbent (if the district was contested by a Democrat and a Republican).  It is on a scale of 0-100.
+`ownexp`         | campaign spending by the incumbent, in nominal dollars
+`oppexp`         | campaign spending by the challenger, in nominal dollars
+`frosh`          | freshman incumbent, facing first reelection effort
+`incwin2`        | incumbent victory dummy
+`moddwnom1`      | Incumbent's voting record (based on dw-nominate).  1 means extreme in the direction of the rest of his party (e.g. an extreme liberal for a Dem), -1 means extreme opposite the direction of his party (e.g.  an extreme liberal for a Rep).
+
+Note also that the unit of analysis is an incumbent-election, meaning that each row is a congressional incumbent's performance in an election.
+
+### Some New Commands
+
+First, we're going to cover some new commands to answer descriptive questions that this dataset can help us answer. Let's begin with a deceptively simple question: How many unique incumbent candidates are in the dataset?
+
+The variable `idno` gives each incumbent candidate a unique identifier, so we can just examine that variable, right?
+
+```{r}
+vote_data$idno
+```
+
+Not quite...doing this just prints all the values of this variable, which lets us see that several values repeat multiple times, meaning that some incumbents appear more than once. Thankfully, we can use `unique()` to remove duplicates.
+
+```{r}
+unique(vote_data$idno)
+```
+
+That's better, but we'd still prefer not to have to manually count this list of unique IDs. But, if we nest `unique()` in `length()`, that will give us our answer -- we have 1,458 candidates in this dataset.
+
+```{r}
+length(unique(vote_data$idno))
+```
+
+Let's address a different question: What is the average number of incumbent candidates by year in this dataset? We have a variable called `year`, but again, we don't want to go through all 5,404 observations and manually count this. Instead, we can use `table()` to tell us how many observations are sorted into each unique value of `year`.
+
+```{r}
+table(vote_data$year)
+```
+
+We could take the average of each value ourselves, but why do that when we could nest `table()` in `mean()` and have `R` do it for us?
+
+```{r}
+mean(table(vote_data$year))
+```
+
+On average, we have about 284 incumbent candidates running for re-election in any given year.
+
+One more practice question: How often do incumbent candidates win their re-election efforts? Let's start by making a basic table.
+
+```{r}
+table(vote_data$incwin2)
+```
+
+We can see that 5,109 incumbent re-election campaigns were successful, but we'd rather have this information as a proportion (or percentage). We can nest `table()` in `prop.table()` to accomplish this.
+
+```{r}
+prop.table(table(vote_data$incwin2))
+```
+
+Now, we can see that incumbents seem to win their re-election campaigns roughly 94.5% of the time.
+
+### Creating Binary Variables
+
+Let's move to our next question: Do most incumbents outspend their opponents? We don't have a variable in our dataset for this, but we do have `oppexp` and `ownexp`, so we can create our own binary (or dummy) variable indicating whether an incumbent was outspent or not using `ifelse()`.
+
+```{r}
+vote_data$outspent <- ifelse(vote_data$oppexp > vote_data$ownexp, # the first argument is a logical statement
+                             1, # This is the value of the new variable is the statement evaluates to TRUE
+                             0 # This is the value of the new variable is the statement evaluates to FALSE
+                             )
+```
+
+Now, we can use the new commands you've learned to answer the question. Write some code below to find out how many incumbent candidates WERE outspent by their opponents.
+
+```{r}
+# Type your code here!
+```
+
+### Multivariate Regression
+
+We'll now examine the relationship between outspending and incumbent two-party vote share. Let's start simple with a bivariate regression. What does $\hat{\beta_1}$ tell us about this relationship?
+
+```{r}
+mod1 <- lm(ov ~ outspent, data = vote_data)
+summary(mod1)
+```
+
+$\hat{\beta_1}$ Interpretation:
+
+There are probably other relevant factors that determine vote share other than outspending, however. Let's add some of those to the model (be sure to reference the codebook above for variable meanings). Interpret your coefficients, and remark on the robustness of $\hat{\beta_1}$ with reference to the bivariate model.
+
+```{r}
+mod2 <- lm(ov ~ outspent + moddwnom1 + frosh, data = vote_data)
+summary(mod2)
+```
+
+$\hat{\beta_1}$ Interpretation:
+
+$\hat{\beta_2}$ Interpretation:
+
+$\hat{\beta_3}$ Interpretation:
+
+### Predicting DV Values
+
+The entire purpose of using regression models is trying to predict our dependent variable based on some independent variable(s). Let's consider a hypothetical freshman incumbent who outspent their opponents with a DW-NOMINATE score of 1 (i.e., all X variables = 1). There are a couple of ways to do this. First, we can plug-and-chug by treating `R` as a calculator:
+
+```{r}
+65.0411 + (-9.2151 * 1) + (4.5491 * 1) + (-2.9451 * 1)
+```
+
+We can also use `predict()`.
+
+```{r}
+predict(mod2, # Specify which regression model to use
+        newdata = data.frame(outspent = 1, # Set each variable in the regression model equal to some value
+                             moddwnom1 = 1,
+                             frosh = 1)
+        )
+```
+
+Either way, we can predict that this hypothetical candidate would receive about 57.43% of the two-party vote share, handily winning the election.
+
+We can also create predicted vote share values using observed values of our independent variables for each observation. There are two commands we can use to do this:
+
+```{r}
+vote_data$fit_v1 <- predict(mod2)
+
+vote_data$fit_v2 <- fitted.values(mod2)
+```
+
+Now that we have variables for our predicted DV values for each observation, we can see how these predicted values vary according to some of our independent variables. In the code chunk below, choose one of the independent variables from the multivariate regression model, and one of the predicted DV variables we just created, then run the code chunk.
+
+```{r}
+plot(x = , # Choose an IV
+     y = , # Choose a DV
+     )
+```
+
+What patterns in predicted vote share values do you see according to values of your independent variable?
+
+### Knit to HTML
+
+Always remember to knit your file when you finish anything!
