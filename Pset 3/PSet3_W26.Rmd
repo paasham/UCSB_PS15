@@ -1,0 +1,104 @@
+---
+title: "Problem Set 3 (Due 6 March 2026, 6:00 pm)"
+author: "Prof. Paasha Mahdavi, PS 15, UCSB"
+date: "Winter 2026"
+output: html_document
+---
+
+# Reminders about submitting your assignment
+
+Please make sure that you first rename and save this file as "LASTNAME-pset3.Rmd" before you do any work. Once you are finished with your problem set and have knitted your file, please remember the following steps to properly upload your assignment to Canvas:
+
+1.  In the Files pane of RStudio, click the box beside all the files you want to download (i.e., the `.Rmd` and `.html` files).
+2.  Hit the gear icon and select "export" from the dropdown menu.
+3.  Hit "download" in the dialog box.
+4.  Find the zip folder in your downloads (NOT through your browser) and unzip the folder so you can access the individual `.html` and `.Rmd` files.
+5.  Go to the Canvas submission portal and submit the `.Rmd` and `.html` files contained within the unzipped folder.
+
+As a reminder, you need to submit both your `.html` and `.Rmd` files for full credit. Any other file extension, such as `.htm` or `.mhtml`, cannot be read and graded. Also, please remember that you need to submit both of your individual files, NOT the zip folder. If you submitted the zip folder, please follow the steps above to correctly submit your problem set.
+
+***
+
+## Question 1. What drives greenhouse gas emissions? 
+
+One of the most important questions in environmental politics research is about the relationship between greenhouse gas emissions and economic development. In this problem set, we will study the determinants of emissions as a function of economic development, energy usage, and the carbon intensity of energy demand. To do so, we will use data from the Our World in Data project for countries in 2021. 
+
+Variable Name                      | Description 
+---------------------------------- | ---------------------------------------------------------
+`country`                          | Country - Geographic location. 
+`iso_code`                         | ISO code - ISO 3166-1 alpha-3 three-letter country codes. 
+`greenhouse_gas_emissions`         | Emissions from electricity generation - Measured in megatonnes of CO2 equivalents (Mt CO2e). 
+`primary_energy_consumption`       | Primary energy consumption - Measured in terawatt-hours (TWh). 
+`electricity_demand`               | Electricity demand - Measured in terawatt-hours (TWh). 
+`carbon_intensity_elec`            | Carbon intensity of electricity generation - Greenhouse gases emitted per unit of generated electricity, measured in grams of CO2 equivalents per kilowatt-hour (gCO2e / kWh). 
+`gdp_cap`                          | Gross domestic product (GDP) per capita, measured in US dollars. 
+
+**You may use generative AI to get coding help for Question 1, but you may NOT use it to help generate written responses in any capacity.**
+
+(a) Load the dataset (`electricity_data.RData`) into your environment (there are no points associated with this). Then, calculate the mean, median, and standard deviation for `greenhouse_gas_emissions` and `gdp_cap`. For each variable:
+
+- Interpret the mean value using appropriate units.
+- Compare the mean and median. What does this tell you about the direction of skewness for each variable? Do NOT use a distribution plot -- rely only on your summary statistics.
+
+**ANSWER: **
+
+(b) We will start by testing the hypothesis that richer countries have higher emissions. Regress `greenhouse_gas_emissions` on `gdp_cap` and show the `summary()` output. Interpret the results, addressing all of the following:
+
+- What are your independent and dependent variables?
+- Report your estimates for $\beta_0$ and $\beta_1$ to 3 decimal places, and explain what each estimate is communicating using its specific value and appropriate units. 
+- Report the $t$-statistic for $\hat{\beta_1}$ and interpret it against the critical value consistent with the standard significance threshold $\alpha$.
+- Report the $p$-value for $\hat{\beta_1}$. Also specify the null and alternate hypotheses you are testing using appropriate mathematical notation. Finally, evaluate the p-value against the standard significance threshold $\alpha$ and provide a conclusion regarding your hypotheses.
+- Do your $t$-statistic and $p$-value lead you to the same conclusions regarding statistical significance? Explain why or why not.
+- Report the model's $R^2$ value to 3 decimal places and provide an interpretation -- what is this specific value communicating about your model?
+
+**ANSWER: **
+
+(c) Using your estimates for $\beta_0$ and $\beta_1$ from part (b), predict GHG emissions for Sweden and Finland using their observed GDP per capita values. You must use `R` code to retrieve each country's GDP from the dataset -- do NOT open the dataset directly. Show all calculations in your code chunk, and report each prediction in your written answer. Then, for each country, calculate the residual (again, use code to retrieve the relevant observed values). What do these residuals tell you about how well the bivariate model predicts GHG emissions for these two countries?
+
+**ANSWER: **
+
+(d) Before adding a few potential confounders to our model, let's examine their distributions. For both `primary_energy_consumption` and `carbon_intensity_elec`:
+
+- Create two binary variables for each: one that equals 1 if the country exceeds the mean, and one that equals 1 if the country exceeds the median. Create a proportion table for each binary variable (four tables total).
+- Compare the two proportion tables for each variable. What do these comparisons tell you about the skewness of each variable's distribution? Be careful not to assume that any difference between the mean and median values indicates meaningful skew -- consider the magnitude of difference in your proportion tables relative to what you would expect from a symmetric distribution. Also, do NOT conduct any further analyses -- rely only on your proportion tables to answer this question.
+
+**ANSWER: **
+
+(e) Now let's add some potential confounders to the model. Regress `greenhouse_gas_emissions` on `gdp_cap`, `primary_energy_consumption`, and `carbon_intensity_elec` and show the `summary()` output. Interpret the results, addressing all of the following:
+
+- Report all coefficient estimates to 3 decimal places and explain what each estimate is communicating using its specific value and appropriate units.
+- For each independent variable, report the associated $p$-value and evaluate it against the standard significance threshold $\alpha$. Provide conclusions regarding statistical significance and the null hypothesis.
+- Report the model's $R^2$ to 3 decimal places. How does this compare to the $R^2$ from part (b)? What does this comparison tell you about the explanatory power of the two models?
+- Using your estimates from (b) and (e), evaluate the robustness of the relationship between `gdp_cap` and `greenhouse_gas_emissions`. Use `R` to calculate the difference between the two $\beta_1$ estimates (show your work in a code chunk). Assess robustness along the dimensions discussed in lecture and section. What do you conclude?
+
+**ANSWER: **
+
+(f) After accounting for confounders, can the coefficient estimate for `gdp_cap` from (e) be interpreted as the causal effect of GDP per capita on GHG emissions? Thoroughly explain why or why not.
+
+Other than those accounted for in (e), do any potential confounders of the relationship between `gdp_cap` and `greenhouse_gas_emissions` remain? Definitively argue for one stance. If you argue that additional confounders remain, propose one specific variable, explain how it relates to the other variables in your model, and identify the direction of bias it would create on your estimate for `gdp_cap`. If you argue that no additional confounders remain, explain your reasoning thoroughly.
+
+**ANSWER: **
+
+## Question 2. Substantive Interpretation 
+
+Write a brief summary (400 words or less) of your analyses in Question 1. Your summary should address all of the following:
+
+- Discuss the robustness of the coefficient on `gdp_cap` between the bivariate and multivariate models. What do your conclusions vis-à-vis robustness suggest about the relationship between GDP and GHG emissions? 
+- Discuss whether the magnitude of the `gdp_cap` coefficient in your multivariate model is meaningful in a practical sense. Is this effect size relevant for policy purposes? Explain your reasoning.
+- Using your multivariate model from part (e), predict GHG emissions for Sweden and Finland. Show your calculations in a code chunk -- do NOT open the dataset to get variable values. How do these predictions compare to (1) the actual observed emissions for each country, and (2) the predictions you made using the bivariate model in part (c)? Explain any differences that may or may not arise.
+
+Write in paragraph form using complete sentences. **You may use generative AI ONLY for the coding component, NOT for verbal answers.**
+
+**ANSWER: **
+
+## Question 3.
+
+Did you collaborate with anyone on this problem set? If so, list them here.
+
+**ANSWER: **
+
+## Question 4.
+
+Did you use generative AI on any part of this problem set? If so, identify which model you used and how you used it -- specifically, identify all questions you used it for and explain how you used it for each question.
+
+**ANSWER: **
