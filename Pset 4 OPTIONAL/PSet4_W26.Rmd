@@ -1,0 +1,128 @@
+---
+title: "Problem Set 4 (Due X XXX 2026, 6:00 pm)"
+author: "Prof. Paasha Mahdavi, PS 15, UCSB"
+date: "Winter 2026"
+output: html_document
+---
+
+# Reminders about submitting your assignment
+
+Please make sure that you first rename and save this file as "LASTNAME-pset4.Rmd" before you do any work. Once you are finished with your problem set and have knitted your file, please remember the following steps to properly upload your assignment to Canvas:
+
+1.  In the Files pane of RStudio, click the box beside all the files you want to download (i.e., the `.Rmd` and `.html` files).
+2.  Hit the gear icon and select "export" from the dropdown menu.
+3.  Hit "download" in the dialog box.
+4.  Find the zip folder in your downloads (NOT through your browser) and unzip the folder so you can access the individual `.html` and `.Rmd` files.
+5.  Go to the Canvas submission portal and submit the `.Rmd` and `.html` files contained within the unzipped folder.
+
+As a reminder, you need to submit both your `.html` and `.Rmd` files for full credit. Any other file extension, such as `.htm` or `.mhtml`, cannot be read and graded. Also, please remember that you need to submit both of your individual files, NOT the zip folder. If you submitted the zip folder, please follow the steps above to correctly submit your problem set.
+
+***
+
+## Question 1: Read Experiment Research Paper
+
+Read the article, "Social Pressure and Voter Turnout: Evidence from a Large-Scale Field Experiment" by Gerber, Green & Larimer, posted on Canvas. Remember, **you may NOT use generative AI to help answer these questions.**
+
+**(1a)** The researchers have a main finding that we discussed in lecture. For this main finding, what is their independent variable? What is their dependent variable? Explain in 1-2 sentences how you identified which is which. For these variables, state the researchers' null and alternative hypotheses in both formal mathematical notation AND in a plain-English sentence. (If you need help with formatting mathematical notation, revisit the section files). Given this is an experiment, what's another term for our independent variable in this context? Why is that term specifically used for experiments rather than observational studies?
+
+**ANSWER: **
+
+**(1b)** Examine Table 1. Describe what this table is communicating to the reader and explain the purpose of this type of table in experimental research -- what are the researchers trying to demonstrate and why does it matter? After looking at this table, do the researchers need to include any control variables in their regression model? Why or why not? Be sure to walk through your reasoning step-by-step.
+
+**ANSWER: **
+
+**(1c)** Examine Table 2. Calculate the average treatment effect (ATE) for the "self" treatment AND one other treatment of your choice. Show your calculations for both by using `R` as a calculator. Which treatment effect is larger? Are you surprised by this? Explain why or why not. Finally, explain how you would calculate ATEs in general and what research design condition(s) you need to calculate unbiased ATEs.
+
+**ANSWER: **
+
+**(1d)** Examine Table 3. Interpret the "self treatment" coefficient in column (a) in terms of its statistical and substantive significance using the substantive meanings of the IV and DV (you do not need to interpret the coefficient value itself). Compare this coefficient to (1) the ATE you calculated in part (c), and (2) the "self treatment" coefficient when control variables (a.k.a., covariates) are included in the OLS model. What does this tell us about their research findings? Would you say this is a causal estimate? Why or why not?
+
+**ANSWER: **
+
+## Question 2: Assassinations Data 
+
+One longstanding debate in the study of international relations concerns the question of whether individual political leaders can make a difference. Some emphasize that leaders with different ideologies and personalities can significantly affect the course of a nation. Others argue that political leaders are severely constrained by historical and institutional forces. Did individuals like Hitler, Mao, Roosevelt, and Churchill make a big difference? The difficulty of empirically testing these arguments stems from the fact that the change of leadership is not random and there are many confounding factors to be adjusted for.
+
+In this exercise, we consider a natural experiment where the success or failure of assassination attempts is assumed to be essentially random. Each observation of the data set `leaders.Rdata` contains information about an assassination attempt. Below are the names and descriptions of variables in this leader assassination data set. The `polity` variable documents and quantifies the regime types of all countries in the world from 1800. The polity score is a 21-point scale ranging from −10 (hereditary monarchy) to 10 (consolidated democracy). In this data set, the `result` variable is a 10 category factor variable describing the result of each assassination attempt. These are the other variables:
+
+Variable Name  | Description 
+------------- | ------------- 
+`country` | country
+`year` | year
+`leadername` | the name of leader who was targeted 
+`age` | the age of targeted leader
+`politybefore` | average polity score of country over 3 years prior to the attempt
+`polityafter` | average polity score of country over the 3 years after the attempt
+`civilwarbefore` | 1 if country is in civil war during 3 years prior to the attempt, 0 otherwise
+`civilwarafter` | 1 if country is in civil war during 3 years after the attempt, 0 otherwise
+`interwarbefore` | 1 if country is in international war during 3 years prior to the attempt, 0 otherwise
+`interwarafter` | 1 if country is in international war during 3 years after the attempt, 0 otherwise
+`result` | the result of assassination attempt
+
+As usual, set your working directory and load the data before beginning the questions below. Remember, **you may use generative AI to help with your coding, but all verbal answers must be generated without the use of AI.**
+
+**(2a)** How many assassination attempts are recorded in the data? How many countries experience at least two leader assassination attempts? What is the average number of assassination attempts (per year) among countries that have experienced at least one assassination? Based on these calculations, what do you conclude about the nature of political violence worldwide? Explain your logic, specifically referring to your results.
+
+**ANSWER: **
+
+**(2b)** Create a new binary variable named `success` that is equal to 1 if a leader dies from the attack and to 0 if the leader survives, using the `levels()` and `ifelse()` functions shown in the Lecture 9 slides as a guide. Store this new variable as part of the original data set. What is the overall success rate of leader assassination? If assassination success was truly as-if random (as the natural experiment posits), what success rate would you expect? How does the actual rate compare? Does this support or challenge the as-if randomness assumption?
+
+**ANSWER: **
+
+**(2c)** Calculate the average `polityafter` score separately for successful versus failed assassination attempts. Describe your finding -- which group has the higher average polity scores, and by how much? Assume the as-if random assumption for this natural experiment holds, regardless of your conclusions in 2(b). Can we interpret the difference you found as the causal effect of successful assassination attempts on polity scores? Explain why or why not.
+
+**ANSWER: **
+
+**(2d)** Does successful leader assassination cause democratization? Answer this question by regressing `polityafter` on `success`, controlling for polity score before the assassination attempt. Interpret the result on your primary independent variable, including the coefficient and significance. How does this estimate compare to the difference-in-means you calculated in 2(c)? What does this lead you to believe regarding the as-if random assumption?
+
+**ANSWER: **
+
+**(2e)** You suspect that age might influence assassination success. Choose an appropriate analytical method from this course to answer this question and briefly justify why you chose this approach. Conduct your analysis and interpret your results. Based on your analysis, does it seem that age predicts assassination success? What does this mean in terms of the validity of this natural experiment? Have you identified and estimated the causal effect of age on assassination success? Why or why not?
+
+**ANSWER: **
+
+## Question 3: Causes of Corruption
+
+In an article in *Comparative Political Studies*, “Institutions and the resource curse: Evidence from cases of oil-related bribery,” Prof. Mahdavi examines possible determinants of prosecuted corruption across oil-rich countries. The dataset  is `oil-corruption.RData` and below is an abbreviated list of the variables.
+
+Variable Name  | Description 
+------------- | ------------- 
+`bribes` | amount of oil-related bribery caught by the Department of Justice in a given country, measured in dollars.
+`lbribes` | logged version of the bribes variable.
+`NOC` | 1 if the country has a regulatory national oil company (NOC), 0 otherwise.
+`GDP` | logged GDP per capita.
+`Oil` | logged oil income per capita.
+`Polity` | polity score, ranging from -10 to +10.
+`PressFreedom` | Freedom of the Press score, ranging from 0 (least restrictions on free press) to 100 (most restrictions on free press).
+`Population` | logged population.
+`UN` | United Nations voting alignment, measuring how often the country votes with the USA at the UN General Assembly.
+
+As usual, load your data (with code) before beginning the questions below. Remember, **you may use generative AI to help with your coding, but all verbal answers must be generated without the use of AI.**
+
+**(3a)** Explore the regulatory NOC variable. What kind of variable is this? Without using `min()`, `max()`, or `summary()`, what are the minimum and maximum values of this variable? How do you know? What is the mean value of NOC? (Do not use `summary()` to calculate this -- use a command that returns *only* the mean.) Interpret this value -- what does the mean tell you about the proportion of countries in the dataset that have a regulatory NOC?
+
+**ANSWER: **
+
+**(3b)** You want to understand what predicts bribery across oil-rich countries. Calculate the average bribery level for countries with and without regulatory NOCs, and report the difference-in-means. Does it appear that having a regulatory NOC is associated with more or less bribery? Does this difference-in-means estimate represent the (causal) ATE of NOCs on bribery? Explain.
+
+**ANSWER: **
+
+**(3c)** Run a regression to predict *logged bribery* using `NOC`, `GDP`, `Polity`, `Population`, and `PressFreedom`. Interpret the results in terms of statistical significance -- you do NOT need to interpret the coefficients. For the statistically significant predictors, comment on the magnitude of their effects -- which variable has the largest substantive impact on bribery? Report and interpret the model's $R^2_j$ value, and explain any differences compared to $R^2$. Why do the degrees of freedom drop after running the model?
+
+**ANSWER: **
+
+**(3d)** It could be that oil is a potential cause of corruption: i.e., that countries with more oil are likely to be more corrupt. One proxy for oil wealth is oil income per capita. Add the `Oil` variable to your model and display the model summary. Is the coefficient on `Oil` statistically significant? What does the coefficient suggest about the relationship between oil income per capita and corruption? Compare the coefficients and p-values of the variables from 3(c) to these variables' coefficients and p-values in this model. Did any of them change in terms of direction, magnitude, or significance? What does this suggest about your original estimates for these variables? Would you describe these results as robust? Explain your logic.
+
+**ANSWER: **
+
+## Question 4.
+
+Did you collaborate with anyone on this problem set? If so, list them here.
+
+**ANSWER: **
+
+## Question 5.
+
+Did you use generative AI on any part of this problem set? If so, identify which model you used and how you used it -- specifically, identify all questions you used it for and explain how you used it for each question.
+
+**ANSWER: **
