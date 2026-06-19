@@ -1,0 +1,127 @@
+---
+title: "POLS 15 -- Section 6"
+author: "Hunter C. Smith"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### DIY Setup
+
+As always, clear your environment, set your working directory, and load in today's data file, `wb.RData`.
+
+```{r}
+# Type your code here!
+```
+
+Here's a description of the variables we'll be using today:
+
+Variable Name            | Description      
+------------------------ | -----------------------------------------      
+`GDPgrowth`              | Growth rate for gross domestic product, measured as a percentage.      
+`CO2emissionscap`        | Carbon dioxide emissions per capita, measured as metric tons.  
+`Healthexpendituretotal` | Health expenditures as a percentage of total GDP. 
+`Mortalityrate`          | Number of deaths per 1,000 adults. 
+
+### Hypothesis Testing
+
+Today, we'll be covering various methods of hypothesis testing -- essentially, how we determine whether our estimates are considered statistically significant. Some of this has been briefly covered in previous sections and some will be new.
+
+Let's remind ourselves of the null and alternate hypotheses we'll be evaluating -- what do each of these mean in words?
+
+$H_0: \beta = 0$ 
+$H_A: \beta \neq 0$
+
+We'll begin with a review of $t$-statistics and $p$-values, both of which are reported in the regression summary table. Let's examine whether GDP growth rates predict carbon dioxide emissions with a simple bivariate regression.
+
+```{r}
+mod1 <- lm(CO2emissionscap ~ GDPgrowth, data = wb)
+summary(mod1)
+```
+
+In the context of regression, $t$-statistics are calculated by dividing the coefficient estimate by its standard error: $t = \frac{\beta}{SE_{\beta}}$. The $t$-statistic associated with $\hat{\beta_1}$ is 0.006, and the associated $p$-value is 0.995. To assess statistical significance, we need to compare these to critical values. For this class, we choose critical values that are consistent with a 95% confidence level.
+
+At 95% confidence, the critical $t$ value, $t^*$ is $\pm$1.96 -- $t$-statistics can be positive or negative, so we need to use the $\pm$ symbol to denote both possibilities. We can say that our estimate is statistically significant if $|t| > |t^*|$. In other words, if the absolute value of our $t$-statistic is larger than 1.96, our estimate is statistically significant. In this case, $t$ = 0.006, which is less than 1.96, so $\hat{\beta_1}$ is statistically insignificant. What decision do we make regarding the null hypothesis in this case?
+
+Another way we can evaluate our hypotheses is by using the $p$-value. As you learned in lecture, the $p$-value tells us the probability of observing the estimate we calculated *if the null hypothesis is true*. In other words, if there is NOT a relationship between X and Y, what is the probability that we would observe the relationship we did? It quantifies the probability of a Type I error (a false positive). 
+
+In this case, the $p$-value associated with $\hat{\beta_1}$ is 0.995. For $p$-values, our point of comparison at a 95% confidence level is 0.05 and is denoted as $\alpha$. An estimate is statistically significant if $p < \alpha$. Note the differences from evaluating the $t$-statistic: $p$-values are bounded between zero and one, so we don't need to worry about negatives or absolute values, and the direction of the comparison is reversed -- we want large $t$-statistics but small $p$-values. For the model above, $p$ = 0.995, which is larger than $\alpha$, so $\hat{\beta_1}$ is statistically insignificant. What decision do we make regarding the null hypothesis in this case?
+
+So far, we've evaluated the significance of $\hat{\beta_1}$ in two ways. Confidence intervals represent a third way we can do this. A confidence interval tells us the range of possible $\beta_1$ values that are consistent with our estimate, $\hat{\beta_1}$. It has an upper and lower bound, and can be manually calculated using values from the regression table. As with $t^*$ and $\alpha$, the confidence interval changes depending on the level of confidence we use. Here is the general formula for a confidence interval:
+
+$$CI = \hat{\beta_1} \pm t^* * SE_{\hat{\beta_1}}$$
+
+Since we use a 95% confidence level, which corresponds to $t^* = \pm 1.96$, we can fill that value in:
+
+$$CI = \hat{\beta_1} \pm 1.96 * SE_{\hat{\beta_1}}$$
+
+Go ahead and calculate the upper and lower bound of the 95% confidence interval associated with $\hat{\beta_1}$ in the code chunk below.
+
+```{r}
+# Type your calculations here!
+```
+
+We determine statistical significance from confidence intervals based on whether zero is contained within the interval. If it is, this means that a null relationship is consistent with the non-null relationship we estimated, which means we cannot be confident a relationship truly exists. Based on the bounds you calculated, what do you conclude about significance?
+
+One thing to note is that no matter which method you use, you should ALWAYS come to the same conclusion about significance for an estimate. This is a good check about your interpretations -- if you evaluate a $t$-statistic as indicating significance but evaluate a $p$-value as indicating insignificance, you've misinterpreted one of your values.
+
+As a quick recap, here are the rules for determining significance for each method:
+- $t$-statistic: $|t| > |t^*|$
+- $p$-value: $p < \alpha$
+- Confidence Interval: zero is not contained within the interval
+
+### Visualizing Confidence Intervals
+
+It's sometimes helpful for us to plot confidence intervals relative to our regression line. Let's examine a new question: does spending on health affect mortality rates? First, let's estimate a regression model and add the regression line to a scatterplot.
+
+```{r}
+mod2 <- lm(Mortalityrate ~ Healthexpendituretotal, data = wb)
+
+plot(wb$Healthexpendituretotal, wb$Mortalityrate,
+     xlab = "Health Expenditure",
+     ylab = "Mortality Rate")
+
+abline(mod2, col = "blue", lwd = 2)
+```
+
+The line indicates a negative relationship between the two -- as health expenditures increase, mortality rates decrease. Now, we're going to add both a 95% and a 99% confidence interval to our plot (you will NOT be asked to do this coding yourself).
+
+```{r}
+plot(wb$Healthexpendituretotal, wb$Mortalityrate,
+     xlab = "Health Expenditure",
+     ylab = "Mortality Rate")
+
+abline(mod2, col = "blue", lwd = 2)
+
+newx <- seq(min(wb$Healthexpendituretotal), max(wb$Healthexpendituretotal), length.out = 100)
+
+CI95 <- predict(mod2, 
+                newdata = data.frame(Healthexpendituretotal = newx),
+                interval = "confidence",
+                level = 0.95)
+lines(newx, CI95[, 2], lty = 2, col = "darkgreen")
+lines(newx, CI95[ ,3], lty = 2, col = "darkgreen")
+
+CI99 <- predict(mod2, 
+                newdata = data.frame(Healthexpendituretotal = newx),
+                interval = "confidence", 
+                level = 0.99)
+lines(newx, CI99[, 2], lty = 3, col = "purple")
+lines(newx, CI99[, 3], lty = 3, col = "purple")
+```
+
+Quick intuition check: why is the 99% confidence interval wider than the 95% confidence interval?
+
+### Do It Yourself!
+
+Now, evaluate this relationship using the three methods you've just learned!
+
+Null Hypothesis: ???
+Alternative Hypothesis: ???
+
+Method 1: ???
+Method 2: ???
+Method 3: ???
+
+### Knit to HTML
+
+Always remember to knit your file when you finish anything!

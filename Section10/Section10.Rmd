@@ -1,0 +1,143 @@
+---
+title: "POLS 15 -- Section 10"
+author: "Hunter C. Smith"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### DIY Setup
+
+As always, clear your environment, set your working directory, and load in today's data file, `immigration_data.csv` (name it "immigration_data").
+
+```{r}
+# Type your code here!
+```
+
+Today, we're using real experimental data collected by Joshua Kalla & David Broockman for their paper "Reducing Exclusionary Attitudes through Interpersonal Conversation: Evidence from Three Field Experiments" that was published in the *American Political Science Review* in 2020. You can view the paper at this link: https://doi.org/10.1017/S0003055419000923
+
+Here's a description of the variables we'll be using today:
+
+Variable Name          | Description 
+---------------------- | ------------------------------------------------------------------ 
+`treat`                | Treatment condition: 0 = control, 1 = short script, 2 = deep canvass
+`any_treat`            | Binary treatment indicator: 0 = control, 1 = received any treatment
+`canvassed`            | Whether the voter actually answered the door and spoke with a canvasser (1 = yes, 0 = no)
+`t1_factor_overall`    | Composite index of attitudes toward undocumented immigrants at follow-up wave 1
+`t1_factor_prej`       | Prejudice sub-index at follow-up wave 1
+`t1_factor_policy`     | Policy attitudes sub-index at follow-up wave 1
+`vf_age`               | Voter's age, from voter file
+`vf_female`            | Voter's gender, from voter file (1 = female, 0 = male)
+`vf_afam`              | Whether the voter is African American, from voter file (1 = yes, 0 = no)
+`vf_latino`            | Whether the voter is Latino, from voter file (1 = yes, 0 = no)
+`vf_voted16`           | Whether the voter voted in 2016 (1 = yes, 0 = no)
+`vf_voted14`           | Whether the voter voted in 2014 (1 = yes, 0 = no)
+
+### Data Processing
+
+Before we can analyze these data, we need to do some cleaning. In particular, we need to take care of some missing data. Let's subset to only the respondents who were actually assigned to a treatment or control condition.
+
+```{r}
+immigration_data <- immigration_data[!is.na(immigration_data$treat),]
+```
+
+### Experimental Design
+
+This study is a field experiment -- an experiment conducted in a real-world setting rather than a laboratory. Here's a quick synopsis of the paper. Canvassers went door-to-door and were randomly assigned to have one of three kinds of conversations with voters about immigration. Voters in the control (or placebo) group discussed recycling. Voters in the short script treatment group heard a brief, one-sided message about immigration. Voters in the deep canvass treatment group had a longer, non-judgmental conversation in which both the canvasser and voter shared personal narratives.
+
+The key design feature that distinguishes experiments from observational studies is random treatment assignment. Voters didn't choose which conversation to have; the researchers randomly determined which treatment the voter received. This is crucial for making causal claims because it means the treatment, our primary independent variable, is exogenous. This means that treatment is independent of everything else about the voter and that any differences we observe in the dependent variable are caused by the randomly assigned treatment variable.
+
+### Experimental Analysis
+
+For simplicity, we're going to focus on the contrast between the control and deep canvass groups, since the deep canvass condition is the authors' main treatment of interest. That means we need to subset to just those two groups and change our treatment indicator from 2 to 1.
+
+```{r}
+imm_sub <- immigration_data[immigration_data$treat == 0 | immigration_data$treat == 2,]
+imm_sub$treat_binary <- ifelse(imm_sub$treat == 2, 1, 0)
+```
+
+The outcome variable `t1_factor_overall` is a composite index of attitudes toward undocumented immigrants measured at the first follow-up wave. Higher values indicate more positive (i.e., less exclusionary) attitudes toward undocumented immigrants. 
+
+The first analytical tool we'll use is a difference-in-means (DIM). Specifically, we are going to calculate mean outcome values for both groups, then subtract the control group's mean from the treatment group's mean. This will give us an estimate of the causal effect of the treatment on our outcome (why?). A nice way to do this is by using `t.test()` which will give us the DIM and evaluate the statistical significance of it.
+
+```{r}
+t.test(t1_factor_overall ~ treat_binary, data = imm_sub) # Arguments are formatted the same way you write a regression model: y ~ x
+```
+
+This output tells us several things. First, at the very bottom, we get the mean outcome values for each of our groups. The treatment group's mean outcome is 0.049, and the control group's mean outcome is -0.063. We can then calculate the DIM.
+
+```{r}
+0.04943025 - -0.06298637
+
+# We can also use commands to do this
+mean(imm_sub$t1_factor_overall[imm_sub$treat_binary==1], na.rm = T) - mean(imm_sub$t1_factor_overall[imm_sub$treat_binary==0], na.rm = T)
+
+```
+
+The t-test also provides us with a $t$-statistic, a $p$-value, and a 95% confidence interval. What do these indicate about the statistical significance of our DIM?
+
+As we discussed, exogeneity means that a simple DIM is an unbiased estimator of the treatment effect. But so is OLS -- and OLS gives us a more familiar format to work from. Let's confirm that both approaches yield the same answer. In the code chunk below, run a bivariate regression model with the treatment and outcome variables and interpret your results.
+
+```{r}
+# Type your code here!
+```
+
+$\hat{\beta_0}$ Interpretation:
+
+$\hat{\beta_1}$ Interpretation:
+
+### Balance Tables
+
+We now know that random treatment assignment makes our DIM & OLS estimates unbiased *in expectation*, meaning that across many replications, they'd give us the correct answer on average. But in any single study, random assignment can still produce treatment and control groups that happen to differ on pre-treatment covariates by pure chance. A balance table checks whether this happened by testing whether the treatment and control groups look similar on key covariates before the treatment was administered.
+
+We can construct a balance table using `t.test()` on each covariate we want to test, splitting by treatment group. First, let's see whether our two groups look similar on age.
+
+```{r}
+t.test(vf_age ~ treat_binary, data = imm_sub)
+```
+
+Just as before, we get the mean age in both groups as well as various statistics to assess whether the difference is significant. The DIM for age is 0.00495, and the $p$-value associated with the difference is 0.9915, indicating that the difference in age between the groups is *NOT* statistically significant. This is actually what we want! For a balance table, we want differences to be insignificant because that means the randomization process worked exactly as planned -- the only significant difference between our groups is the treatment, so any changes in the dependent variable result directly from receiving the treatment.
+
+Now, evaluate whether these groups are balanced on a few more covariates: gender (`vf_female`), race (`vf_afam` and `vf_latino`), and voting record (`vf_voted14` and `vf_voted16`).
+
+```{r}
+# Type your code here!
+```
+
+Do these analyses suggest that randomization was successful? Is there any covariate where you're concerned about imbalance?
+
+If you do find evidence that your groups are imbalanced, then a simple DIM is no longer an unbiased estimator because the groups statistically significantly differ in more than one way. OLS can help us address this issue because we can simply include any imbalanced covariates as controls. Even if your groups are not imbalanced, it's still good to run your models with these variables included as a robustness check.
+
+### Compliance
+
+So far, we've assumed that voters who were assigned to the deep canvass treatment actually received it. But think about what this study's design entails: a canvasser had to show up at someone's door, and that person had to be home, answer the door, and agree to have a conversation. Not everyone did. The variable `canvassed` tells us whether a voter actually spoke with a canvasser. Let's compare the proportion of voters *assigned* to the treatment group and the proportion of voters who *received* the treatment.
+
+```{r}
+prop.table(table(imm_sub$treat_binary))
+prop.table(table(imm_sub$canvassed))
+```
+
+The difference in proportions suggests that there is a gap between treatment assignment and treatment receipt. This is called a compliance problem. In this specific example, compliance is one-sided -- voters assigned to the control group could not accidentally receive the deep canvass treatment, but some voters assigned to the deep canvass group simply didn't answer the door. Voters who were assigned to treatment but didn't actually receive it are called non-compliers.
+
+Compliance problems have important implications for how we can interpret our estimates. When compliance problems are present, the estimates we calculated using the DIM and OLS are called the Intent-to-Treat (ITT) effect. This is the effect of being assigned to treatment, regardless of whether the voter actually received it. Because non-compliers are included here, the ITT estimate is typically smaller in magnitude than the true ATE.
+
+The effect among compliers is called the Average Treatment Effect on the Treated (ATT). Here, non-compliers are dropped and we are only estimating the treatment effect for individuals who were assigned to treatment AND actually received it. Estimating the ATT requires more advanced methods than anything we cover in POLS 15, but it's important to keep the intuition in mind when interpreting experimental results. If compliance is low, the ITT estimate yielded from DIM or OLS analyses may be substantially understating how effective the treatment actually was.
+
+### Case Studies & Case Selection
+
+So far, we've focused on the experimental results from Kalla & Broockman's first experiment, which assessed attitudes toward undocumented immigrants. But the paper doesn't stop there -- the authors ran two additional experiments targeting attitudes toward transgender individuals. Why? And why these two topics specifically? 
+
+As you know from Seawright & Gerring (2008), case selection is the process of deliberately choosing which cases to study and why. While their framework was developed primarily for qualitative research, the same logic applies whenever a researcher has to decide *where* or *among whom* to test a theory. In an experimental (or, more broadly, quantitative) context, this often means choosing which populations, settings, or -- as in this paper -- which attitude domains to study.
+
+Kalla & Broockman's core theoretical claim is that non-judgmental, narrative-based conversations can reduce exclusionary attitudes. If they had only tested this in one context (immigration), a reader may wonder whether the result was specific to that topic, that particular group of canvassers, or that particular moment in time. We know that experiments generally have solid claims to internal validity, but their external validity is highly questionable. Different case selection strategies can help us answer these types of questions and assess validity claims.
+
+In the context of this paper, Kalla & Broockman need to demonstrate that their theory holds across different contexts, not just for undocumented immigrants. In other words, they want to show that their theory is generalizable, which is why they adopted a most different case selection strategy. Seawright & Gerring explain that in a most-different case design, researchers select cases that vary as much as possible on background characteristics while the phenomenon of interest remains the same (in this case, the phenomenon of interest is the treatment and its effect). If a finding holds across very different contexts, we have a much stronger reason to believe it reflects something real rather than being an artifact of one particular setting or moment.
+
+Immigration and transgender attitudes are very different attitude domains in many respects. They involve different out-groups, different policy debates, etc. Yet the core treatment is held constant across all three experiments. This reflects the nature of a most different selection strategy: vary the context, hold the treatment constant, and look for consistent results.
+
+As it turns out, the deep canvass intervention reduced exclusionary attitudes in all three experiments, with comparable effect sizes across immigration and transgender contexts. The most different strategy showed that the theory seems to be broadly generalizable. The mechanism driving attitude change is the treatment (i.e., the conversation), **NOT** something specific to either context. 
+
+The paper could have gone very differently, however. It could have been the case that there were significant results for immigration, but insignificant results for transgender attitudes. Here, the most different case selection strategy would be confirming scope or boundary conditions -- the theory works, but only within certain contexts. In either the generalizable or scoping cases, case selection is vitally important to making certain claims, and researchers need to be acutely aware of how they are combining case selection strategies with the types of questions they're trying to answer.
+
+### Knit to HTML
+
+Always remember to knit your file when you finish anything!

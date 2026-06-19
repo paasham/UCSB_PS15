@@ -1,0 +1,175 @@
+---
+title: "POLS 15 -- Section 11"
+subtitle: "Course Review"
+format:
+  beamer:
+    theme: Antibes
+    colortheme: lily
+    navigation: frame
+editor: visual
+---
+
+# Concepts
+
+## Causality & Correlation
+
+-   Is this just a matter of experimental studies versus observational studies? Why or why not?
+
+-   Why can't we infer causality from observational studies?
+
+    -   Selection problems
+    -   Confounding
+    -   Comparability
+
+## Variables
+
+-   Independent Variable (IV): a variable that possibly influences the value of the dependent variable. It is usually denoted as X.
+
+-   Dependent Variable (DV): the outcome of interest, usually denoted as Y.
+
+-   In an experimental study, the IV can also be called the "treatment" and is usually denoted as D.
+
+## Cycle of Statistical Inference
+
+-   Estimand \rightarrow Sample \rightarrow Estimator \rightarrow Estimate
+
+-   Other terms for estimand: population, true value, parameter
+
+-   Examples of estimators: sample mean, sample variance, difference-in-means, OLS regression
+
+-   Examples of estimates: ATE, $\beta$, $\overline{X}$
+
+## Validity
+
+-   Internal Validity: A finding is internally valid when it is based on a process that is free from systematic error.
+
+    -   i.e., confounders are properly controlled
+
+-   External Validity: A finding is externally valid when it applies beyond the context in which the analysis was conducted (generalizability).
+
+-   Experimental results are often considered internally valud but their external validity can be debated.
+
+## Endogeneity & Exogeneity
+
+-   An independent variable is endogenous if changes in it are related to other factors that influence the dependent variable.
+    -   i.e., $Cor(X,\epsilon) \neq 0$
+-   An independent variable is exogenous if changes in it are unrelated to other factors that influence the dependent variable.
+    -   i.e., $Cor(X,\epsilon) = 0$
+
+## Random Variables
+
+-   Three characteristics:
+    -   There is a set of possible values
+    -   Each value occurs with some probability
+    -   The value is not known until there is a draw (i.e., the event happens)
+-   Probabilities aggregate to 1 (100%)
+
+## P-Values & Hypothesis Testing
+
+-   P-Value: the probability of observing a coefficient as high as we actually observe if the null hypothesis is true
+
+    -   $H_0: \beta = 0$
+    -   $H_A: \beta \neq 0$
+
+-   What is the significance level $\alpha$?
+
+-   Interpretation:
+
+    -   Statistically significant or insignificant
+    -   Reject or fail to reject the null hypothesis
+    -   NEVER ACCEPT
+
+## Confidence Intervals
+
+-   Confidence intervals define the range of true values that are consistent with the observed coefficient estimate.
+    -   Depend on the point estimate (coefficient) and measure of uncertainty.
+
+$$CI = \hat{\beta} \pm t^* * SE_{\hat{\beta}}$$
+
+-   $t^*$ changes depending on confidence level.
+    -   At 95% confidence ($\alpha$ = 0.05), $t^*$ = $\pm$ 1.96
+
+# Research Design
+
+## Experiments
+
+-   Main characteristic: randomly assign participants to control or treatment groups
+    -   Randomness $\neq$ Randomization
+-   ABC Issues:
+    -   Attrition: occurs when people drop out of an experiment altogether so that we do not observe the DV for them.
+    -   Balance: groups are balanced if the distributions of control variables are the same for the treatment and control groups (no statistical difference).
+    -   Compliance: a compliance problem occurs when subjects assigned to the treatment group do not actually receive the treatment, often because they opt out in some way.
+
+## Surveys
+
+-   Figure out your research question and establish your target population.
+
+-   Key considerations:
+
+    -   How to sample your population (random? purposive? quota?)
+    -   Survey instrument & delivery (questionnaire, phone call, in-person, etc.)
+
+-   Types of survey and administrative data:
+
+    -   Cross-sectional data: data having observations for multiple units for one time period.
+    -   Time-series/longitudinal data: data having observations over time.
+    -   Panel data: data having observations for the same individuals at multiple points in time.
+
+## Qualitative Research
+
+-   Case selection strategies affect what types of questions you can answer.
+
+-   Types of cases:
+
+    -   Typical
+    -   Diverse
+    -   Extreme
+    -   Deviant
+    -   Influential
+    -   Most similar
+    -   Most different
+
+# Analysis
+
+## OLS Models
+
+-   When do we use bivariate versus multivariate models?
+    -   Why do we need more IVs?
+    -   In an OLS model, what does each term represent?
+-   Points to review:
+    -   Coefficient interpretation (intercept & slope)
+    -   Goodness of fit ($R^2$)
+    -   Model specification
+    -   Null/alternative hypotheses & p-values
+    -   Number of IVs
+    -   Robustness
+    -   Model fishing
+
+# Research Papers
+
+## How to Read a Paper
+
+-   Key points:
+    -   Research topic
+    -   IVs & DVs + measurement
+    -   Research design & methods
+    -   Findings & implications
+    -   Thoughts on improving the research (different measurements? methods? design?)
+
+## Reading List
+
+-   Wand et al. (2001), "The Butterfly Did It: The Aberrant Vote for Buchanan in Palm Beach County, Florida"
+
+-   Kalla & Broockman (2015), "Congressional Officials Grant Access Due to Campaign Contributions: A Randomized Field Experiment"
+
+-   Colantone et al. (2024), "The Political Consequences of Green Policies: Evidence from Italy"
+
+-   Gerber, Green, & Larimer (2008), "Social Pressure & Voter Turnout: Evidence from a Large-Scale Field Experiment"
+
+## Reading List
+
+-   Gerring (2007), "The Case Study: What It Is and What It Does"
+
+-   Seawright & Gerring (2008), "Case Selection Techniques in Case Study Research: A Menu of Qualitative and Quantitative Options"
+
+-   Imai (2018), *Quantitative Social Science: An Introduction*, Ch. 5

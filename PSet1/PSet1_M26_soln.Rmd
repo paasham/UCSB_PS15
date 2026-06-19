@@ -1,0 +1,128 @@
+---
+title: "Problem Set 1 -- Solution Set"
+author: "Hunter C. Smith"
+date: "Summer 2026"
+output: html_document
+---
+
+*Part 1. Theory. Short answer questions (5 points total)*
+
+Start by reading **Chapter 1** of the textbook, *Real Stats*. You can also review your lecture notes. You may **NOT** use generative AI to answer these questions.
+
+Q1. A researcher observes that countries with democratic systems have weaker climate policies, compared to countries with non-democratic systems. She decides to publish a research article that says having this form of government causes countries to become less climate friendly. Would you like to be a co-author on this paper? Why or why not? (100 words max) **(1 point)**
+
+**ANSWER: No. It’s not causally identified. It could be the case that there is some unobserved confounder that drives variation in both countries having a democratic system and average levels of income. This means that we are unable to infer a causal relationship from the observed correlation.**
+
+Q2. Explain what this sentence means: "Experiments create exogeneity via randomization." (75 words max) **(1 point)**
+
+**ANSWER: Randomization is how the treatment is assigned (for example by fipping a coin) and ensures that the treatment variable is exogenous, meaning it is not correlated with factors captured in the error term. This overcomes problems of selection bias and confounding variables. Ensures groups are comparable.**
+
+**[Note: must mention correlation with error term for full credit, 0.75 otherwise.]**
+
+Q3. What do we refer when we talk about the "internal validity" and "external validity" of experiments? (100 words max) **(1 point)**
+
+**ANSWER: Internal validity refers to the design of the experiment, specifically whether it is free from confounders and bias. External validity refers to the extent to which we can generalize its findings to other contexts or populations.**
+
+Q4. You decide to run an experiment to see whether working in groups helps students learn. You randomly assign half of the class to form study groups to work on their problem sets, and to visit office hours every week. For the other half of the class, you assign them to work individually. At the end of the semester, you give the entire class a test. You find that the students in the first group did much better than those in the second group, who worked individually. (120 words max across all parts)
+
+4a. What could you call each group? **(0.4 points - 0.2 each)**
+
+**ANSWER: Treatment: students assigned to work in groups and visit office hours. Control: students assigned to work individually. (could reverse these, that’s OK)**
+
+**[Note: do not grant credit if the treatment group is labeled as the experimental group.]**
+
+4b. What is your independent variable and what is your dependent variable? **(0.4 points - 0.2 each)**
+
+**ANSWER: IV: working in groups, DV: learning/test performance.**
+
+4c. Given this set up, list some factors you need to control for. **(0.4 points)**
+
+**ANSWER: Anything that could be unbalanced across the two groups; BUT in general you don’t need to control for anything if randomization worked.**
+
+**[Note: grant half credit if they provide a list of variables but do not mention balance.]**
+
+4d. Can you say that working in groups caused the students to do better on the test? Why or why not? Explain using the technical terms in the textbook. **(0.4 points)**
+
+**ANSWER: No – internal validity, the treatment group was assigned to work in groups AND also go to the office hours. Thus, groups are not identical more than in one factor. The variable of interest is confounded. Groups are not compararble either.**
+
+4e. Can you say that this finding would also apply in other types of courses (for example, writing-intensive classes)? Why or why not? Explain using the technical terms in the textbook. **(0.4 points)**
+
+**ANSWER: No – external validity, not clear it generalizes to other types of courses, for example writing-intensive courses.**
+
+***
+
+*Part 2. Data Analysis (5 points total)*
+
+Q5. Load the data into `R`. The data are stored as an `.RData` file, so you can use the `load()` function to load it. What name is given to the dataset object in your environment? **(0.5 points)**
+
+```{r}
+rm(list = ls())
+setwd("/Users/hunte/Desktop/POL SW 15 Materials (M26)/PSets")
+load("humanrights.RData")
+```
+
+**ANSWER: The dataset is called "owid".**
+
+Q6. Check the dimensions of the data (i.e. the number of rows and columns). How many observations are there? How many variables are there? **(0.5 points)**
+
+```{r}
+dim(owid)
+```
+
+**ANSWER: 160 observations of 3 variables.**
+
+Q7. What are the names of the variables in the dataset? **(0.5 points)**
+
+```{r}
+names(owid)
+```
+
+**ANSWER: The variables' names are "country", "humanrights", and "gdppc".**
+
+Q8. Calculate the average of `gdppc`, which is average income per capita for each country, across all points in the sample. Do you think this average is large or small? Explain your answer. What is the minimum and the maximum `gdppc`? Make sure to substantively explain what each of these values are communicating in terms of the information in your dataset. **(0.5 points)**
+
+```{r}
+summary(owid$gdppc)
+```
+
+**ANSWER: The mean GDP per capita is 19,112.70 dollars. The minimum GDP per capita is 596.40 dollars, while the maximum GDP per capita is 88,366.2 dollars. The average value is much closer to the minimum than the maximum, so it seems like a fairly low average.**
+
+Q9. Calculate the average of the human rights index across all points in the sample. What does this tell you about the prevalence of human rights protections? Make sure to explain what this value is communicating. **(0.5 points)**
+
+```{r}
+mean(owid$humanrights)
+```
+
+**ANSWER: The average human rights protection value is 0.67, indicating a fairly middle-of-the-road value for human rights protections. Ideally, we'd like this value to be a bit larger.**
+
+Q10. Produce a simple scatterplot with average income (GDP per capita) on the horizontal axis and the human rights protections (Human Rights Index) on the vertical axis. **(0.5 points)**
+
+```{r}
+plot(owid$gdppc, owid$humanrights,
+     xlab = "GDP per capita",
+     ylab = "Human Rights",
+     main = "Human Rights based on GDP per capita")
+```
+
+Q11. Make the plot again, but this time add a trend line (also known as a line of best fit or a regression line) using the `abline()` command. **(0.5 points)**
+
+```{r}
+plot(owid$gdppc, owid$humanrights,
+     xlab = "GDP per capita",
+     ylab = "Human Rights",
+     main = "Human Rights based on GDP per capita")
+mod1 <- lm(humanrights ~ gdppc, data = owid)
+abline(mod1, col = "red")
+```
+
+Q12. What does this line tell you about the relationship between development and human rights? **(0.5 points)**
+
+**ANSWER: A larger level of GDP per capita is associated with higher rates of human rights protection: the higher the levels of development, the better the human rights outcomes. There is a positive relationship.**
+
+Q13. Is this a causal relationship? Explain why or why not. **(1 point)**
+
+**ANSWER: No, the relationship is purely correlational. GDP per capita cannot be randomly assigned and is therefore endogenous, meaning that other unobserved factors might be influencing this relationship.**
+
+Q14. Did you use generative AI on any part of this problem set? If so, identify which model you used and how you used it -- specifically, identify all questions you used it for and explain how you used it for each question.
+
+**ANSWER: -1 if this question is unanswered.**

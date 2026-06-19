@@ -1,0 +1,178 @@
+---
+title: "Problem Set 4 -- Solution Set"
+author: "Hunter C. Smith"
+date: "Summer 2026"
+output: html_document
+---
+
+## Question 1. Returning to GHG emission drivers
+
+```{r}
+rm(list = ls())
+setwd("/Users/hunte/Desktop/POL SW 15 Materials (M26)/PSets")
+load("electricity_data.RData")
+```
+
+(a) Before adding a few potential confounders to our model, let's examine their distributions. For both `primary_energy_consumption` and `carbon_intensity_elec`:
+- Create two binary variables for each: one that equals 1 if the country exceeds the mean, and one that equals 1 if the country exceeds the median. Create a proportion table for each binary variable (four tables total).
+- Compare the two proportion tables for each variable. What do these comparisons tell you about the skewness of each variable's distribution? Be careful not to assume that any difference between the mean and median values indicates meaningful skew -- consider the magnitude of the difference in your proportion tables relative to what you would expect from a symmetric distribution. Also, do NOT conduct any further analyses -- rely only on your proportion tables to answer this question.
+
+**(1 point)**
+
+```{r}
+energy$pec_bin_mean <- ifelse(energy$primary_energy_consumption > mean(energy$primary_energy_consumption), 1, 0)
+energy$pec_bin_median <- ifelse(energy$primary_energy_consumption > median(energy$primary_energy_consumption), 1, 0)
+
+energy$cie_bin_mean <- ifelse(energy$carbon_intensity_elec > mean(energy$carbon_intensity_elec), 1, 0)
+energy$cie_bin_median <- ifelse(energy$carbon_intensity_elec > median(energy$carbon_intensity_elec), 1, 0)
+
+prop.table(table(energy$pec_bin_mean))
+prop.table(table(energy$pec_bin_median))
+
+prop.table(table(energy$cie_bin_mean))
+prop.table(table(energy$cie_bin_median))
+```
+
+
+**ANSWER:** \
+
+**Primary Electricity Consumption: 82.42% of observations are below the mean, while 50.3% of observations are below the median. This indicates that the mean is inflated and, therefore, this variable is severely positively skewed.** \
+
+**Carbon Intensity of Electricity Generation: 46.06 % of observations are below the mean, while 50.3% of observations are below the median. This indicates that the mean is deflated and, therefore, this variable is slightly negatively skewed.**
+
+(b) Now let's add some potential confounders to the model. Regress `greenhouse_gas_emissions` on `gdp_cap`, `primary_energy_consumption`, and `carbon_intensity_elec` and show the `summary()` output. Interpret the results, addressing all of the following:
+- Report all coefficient estimates to 3 decimal places and explain what each estimate is communicating using its specific value and appropriate units.
+- For each independent variable, report the associated $p$-value ad evaluate it against the standard significance threshold $\alpha$. Provide conclusions regarding statistical significance and the null hypothesis.
+- Report the model's $R^2$ to 3 decimal places. How does this compare to the $R^2$ from last week's bivariate model? What does this comparison tell you about the explanatory power of the two models?
+- Compare your estimates from last week to the new multivariate model. Specifically, evaluate the robustness of the relationship between `gdp_cap` and `greenhouse_gas_emissions`. Use `R` to calculate the difference between the two $\beta_1$ estimates (show your work in a code chunk). Assess robustness along the dimensions discussed in lecture and section. What do you conclude?
+
+**(3 points)**
+
+```{r}
+mod2 <- lm(greenhouse_gas_emissions ~ gdp_cap + primary_energy_consumption + carbon_intensity_elec, data = energy)
+summary(mod2)
+```
+
+**ANSWER:** \
+
+**$\hat{\beta_0}$: When all independent variables are set equal to zero, GHG emissions are predicted to be -20.773 Mt CO$_2$e.** \
+
+**$\hat{\beta_1}$: A one dollar increase in GDP per capita is associated with a 0.001 Mt CO$_2$e decrease in GHG emissions, ceteris paribus. $p$ = 0.00231, so $p < \alpha$. $\hat{\beta_1}$ is statistically significant and we can reject the null hypothesis.** \
+
+**$\hat{\beta_2}$: A one TWh increase in primary energy consumption is associated with a 0.102 Mt CO$_2$e increase in GHG emissions, ceteris paribus. $p < 2*10^{-16}$, so $p < \alpha$. $\hat{\beta_2}$ is statistically significant and we can reject the null hypothesis.** \
+
+**$\hat{\beta_3}$: A one gCO2e/kWh increase in carbon intensity of electricity generation is associated with a 0.062 Mt CO$_2$e increase in GHG emissions, ceteris paribus. $p$ = 0.06012, so $p > \alpha$. $\hat{\beta_3}$ is statistically insignificant and we fail to reject the null hypothesis.** \
+
+**$R^2$ = 0.9438. This is far larger than the bivariate model (0.006), which indicates that the multivariate model explains more of the observed variation in GHG emissions. We cannot, however, conclude that the multivariate model is *better* than the bivariate model.**
+
+```{r}
+abs(-0.001273 - 0.001669)
+```
+
+**The absolute difference between the model coefficients is 0.002942. The magnitude of the coefficients is roughly the same (0.001 vs. 0.002). However, the direction changed from positive to negative, and the estimate went from insignificant to significant. The result is not robust to changes in model specification, indicating that the first model was likely biased due to omitted variables and endogeneity.**
+
+(c) After accounting for confounders, can the coefficient estimate for `gdp_cap` from (b) be interpreted as the causal effect of GDP per capita on GHG emissions? Thoroughly explain why or why not. Other than those accounted for in (b), do any potential confounders of the relationship between `gdp_cap` and `greenhouse_gas_emissions` remain? Definitively argue for one stance. If you argue that additional confounders remain, propose one specific variable, explain how it relates to the other variables in your model, and identify the direction of bias it would create on your estimate for `gdp_cap`. If you argue that no additional confounders remain, explain your reasoning thoroughly. **(1 point)**
+
+**ANSWER: Could say either yes or no, but need to defend it.** \
+
+**[Option for No] No, there are still potential confounders for which we are not controlling, which continue to introduce omitted variable bias and bias the coefficient estimates. [Discuss any reasonable remaining confounder, but must explain how it is related to both GDP and emissions as well as reasonable discussion of direction of bias].** \
+
+**[Option for Yes] Yes, because we may not expect any additional confounders given that the relationship between electricity-related emissions and electricity consumption and carbon intensity of electricity production is fairly mechanical. That is, it is unlikely that there is some other factor that is both related to energy consumption and/or carbon intensity and also related to emissions from electricity generation.**
+
+## Question 2. Substantive Interpretation 
+
+Write a brief summary (400 words or less) of your greenhouse gas emissions analyses in Problem Set 3. Your summary should address all of the following:
+
+- Discuss the robustness of the coefficient on `gdp_cap` between the bivariate and multivariate models. What do your conclusions vis-à-vis robustness suggest about the relationship between GDP and GHG emissions? 
+- Discuss whether the magnitude of the `gdp_cap` coefficient in your multivariate model is meaningful in a practical sense. Is this effect size relevant for policy purposes? Explain your reasoning.
+- Using your multivariate model from part (b), predict GHG emissions for Sweden and Finland. Show your calculations in a code chunk -- do NOT open the dataset to get variable values. How do these predictions compare to (1) the actual observed emissions for each country, and (2) the predictions you made using the bivariate model last week? Explain any differences that may or may not arise.
+
+Write in paragraph form using complete sentences. **You may use generative AI ONLY for the coding component, NOT for verbal answers.**
+
+**(3 points)**
+
+**ANSWER:** \
+
+**Part 1: The estimates for GDP per capita are not robust, indicating that the relationship between GDP per capita and GHG emissions is NOT exogenous and does not allow for causal interpretation.** \ 
+
+**Part 2: The estimate is not substantively significant. In other words, a one-unit change in GDP per capita does not result in a meaningful change in GHG emissions. For example, even a $100,000 increase in GDP only corresponds to a 100 megaton decrease in emissions, which range from 0 to roughly 5000. If policymakers want to decrease GHG emissions, they should focus on ways to decrease primary energy consumption and carbon intensity of electricity generation rather than trying to increase GDP per capita.**
+
+```{r}
+sweden_gdp <- energy$gdp_cap[energy$country == "Sweden"]
+finland_gdp <- energy$gdp_cap[energy$country == "Finland"]
+
+sweden_pv_biv <- 52.121367 + (0.001669 * sweden_gdp)
+finland_pv_biv <- 52.121367 + (0.001669 * finland_gdp)
+
+sweden_pv_biv
+finland_pv_biv
+
+sweden_pv_multi <- -20.773 + (-0.001 * energy$gdp_cap[energy$country == "Sweden"]) + (0.102 * energy$primary_energy_consumption[energy$country == "Sweden"]) + (0.062 * energy$carbon_intensity_elec[energy$country == "Sweden"])
+
+finland_pv_multi <- -20.773 + (-0.001 * energy$gdp_cap[energy$country == "Finland"]) + (0.102 * energy$primary_energy_consumption[energy$country == "Finland"]) + (0.062 * energy$carbon_intensity_elec[energy$country == "Finland"])
+
+sweden_pv_multi
+finland_pv_multi
+
+energy$greenhouse_gas_emissions[energy$country == "Sweden"]
+energy$greenhouse_gas_emissions[energy$country == "Finland"]
+
+sweden_pv_biv
+finland_pv_biv
+```
+
+**Sweden: For the multivariate model, predicted GHG emissions = 0.45 Mt CO$_2$e. For the bivariate model, predicted GHG emissions = 144.12 Mt CO$_2$e. Observed GHG emissions = 7.18 Mt CO$_2$e. The multivariate model gets closer to the observed emissions, but is now underpredicting. By accounting for additional variables, our predictions have become much more aligned with observed values.**
+
+**Finland: For the multivariate model, predicted GHG emissions = -19.69 Mt CO$_2$e. For the bivariate model, predicted GHG emissions = 132.16 Mt CO$_2$e. Observed GHG emissions = 9.77 Mt CO$_2$e. The multivariate model gets closer to the observed emissions, but is now underpredicting. In fact, we are now predicting negative emissions, which is not realistic. By accounting for additional variables, our predictions are in closer proximity to the observed values, but this model doesn't appear to do a good job of accurately predicting GHG emissions for this observation in particular.**
+
+## Question 3. Causes of Corruption
+
+**(3a)** Explore the regulatory NOC variable. What kind of variable is this? Without using any code, what are the minimum and maximum values of this variable? How do you know? What is the mean value of NOC? (Do not use `summary()` to calculate this -- use a command that returns *only* the mean.) Interpret this value -- what does the mean tell you about the proportion of countries in the dataset that have a regulatory NOC? **(0.5 points)**
+
+```{r}
+load("oil-corruption.RData")
+mean(bribe$NOC)
+```
+
+**ANSWER: NOC is a dummy/binary variable, meaning it only takes values of 0 or 1. Because of this, the minimum will be 0, and the maximum will be 1. The mean of NOC is 0.39. This value indicates that 39 percent of countries in the dataset have a regulatory NOC, while 61 percent of countries do not.**
+
+**(3b)** You want to understand what predicts bribery across oil-rich countries. Calculate the average bribery level for countries with and without regulatory NOCs, and report the difference-in-means. Does it appear that having a regulatory NOC is associated with more or less bribery? Does this difference-in-means estimate represent the (causal) ATE of NOCs on bribery? Explain. **(0.5 points)**
+
+```{r}
+mean(bribe$bribes[bribe$NOC == 0])
+mean(bribe$bribes[bribe$NOC == 1])
+
+mean(bribe$bribes[bribe$NOC == 1]) - mean(bribe$bribes[bribe$NOC == 0])
+```
+
+**ANSWER: In countries without a regulatory NOC, the average amount of oil-related bribery is $1,174.065. In countries with a regulatory NOC, the average amount of oil-related bribery is $25,145,086. The difference-in-means between these groups is $23,971,021, which suggests that more bribery occurs when a country has a regulatory NOC. However, this does not represent the causal effect of NOCs on bribery because whether a country has a regulatory NOC or not is not random; it is likely dependent on several political and economic factors for which we are not accounting in this difference-in-means estimate. In other words, our independent variable is endogenous, so the difference-in-means cannot estimate an unbiased ATE.**
+
+**(3c)** Run a regression to predict *logged bribery* (the variable `lbribes`) using `NOC`, `GDP`, `Polity`, `Population`, and `PressFreedom`. Interpret the results in terms of statistical significance -- you do NOT need to interpret the coefficients. For the statistically significant predictors, comment on the magnitude of their effects -- which variable has the largest substantive impact on bribery? Report and interpret the model's $R^2_j$ value, and explain any differences compared to $R^2$. Why do the degrees of freedom drop after running the model? **(0.5 points)**
+
+```{r}
+mod3 <- lm(lbribes ~ NOC + GDP + Polity + Population + PressFreedom, data = bribe)
+summary(mod3)
+```
+
+**ANSWER: The NOC and Population variables are statistically significant, while the GDP, Polity, and PressFreedom variables are statistically insignificant. [Can intepret substantive significance either way as long as it is logically consistent.] The model's adjusted $R^2$ is 0.3407, indicating that the model we've specified accounts for 34.07 percent of the variation we observe in logged bribes. It is lower than standard $R^2$ because there are statistically insignificant ("irrelevant") variables in the model that seem to not meaningfully explain the variation in bribes. The degrees of freedom drop because we are controlling for five variables plus an intercept, so we go from 59 observations to 53 degrees of freedom.**
+
+**(3d)** It could be that oil is a potential cause of corruption: i.e., that countries with more oil are likely to be more corrupt. One proxy for oil wealth is oil income per capita. Add the `Oil` variable to your model and display the model summary. Is the coefficient on `Oil` statistically significant? What does the coefficient suggest about the relationship between oil income per capita and corruption? Compare the coefficients and p-values of the variables from 3(c) to these variables' coefficients and p-values in this model. Did any of them change in terms of direction, magnitude, or significance? What does this suggest about your original estimates for these variables? Would you describe these results as robust? Explain your logic. **(0.5 points)**
+
+```{r}
+mod4 <- lm(lbribes ~ NOC + GDP + Polity + Population + PressFreedom + Oil, data = bribe)
+summary(mod4)
+```
+
+**ANSWER: The Oil variable itself is statistically significant and suggests a positive relationship between oil income per capita and bribery -- i.e., as oil income increases, so does bribery. No variables change in terms of significance. Once the Oil variable is added, the coefficient on GDP changes direction from positive to negative. Most variables change in magnitude slightly. This suggests that the estimates from 3(c) were likely biased because we were omitting relevant variables, such as Oil. The coefficient estimate on GDP is not robust because it changes directionality when a new variable is added. [Students could argue that other results are or are not robust since there are no other changes in terms of direction or significance, only slight changes in magnitude.]**
+
+## Question 4.
+
+Did you collaborate with anyone on this problem set? If so, list them here.
+
+**ANSWER: -0.5 points if unanswered.**
+
+## Question 5.
+
+Did you use generative AI on any part of this problem set? If so, identify which model you used and how you used it -- specifically, identify all questions you used it for and explain how you used it for each question.
+
+**ANSWER: -0.5 points if unanswered.**

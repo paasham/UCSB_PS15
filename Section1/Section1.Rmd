@@ -1,0 +1,153 @@
+---
+title: "POLS 15 -- Section 1"
+author: "Hunter C. Smith"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+Welcome to POLS 15! Each week, you will have a file like this that guides you through some new code, as well as some DIY exercises to test your understanding. Let's get into some basics.
+
+This is called an R Markdown file (denoted by the `.Rmd` file extension). All of your files will look like this, and can be knitted into an HTML file (more on what this means later). R Markdown files are useful because they can include plain text as well as code.
+
+Plain text will always be written on the white background, as you see now. When you want to write and run code, you need to insert a code chunk that looks like this:
+
+```{r}
+# This is a code chunk!
+```
+
+Normally, you won't include the hashtag in front of your code, as doing so means you are leaving a comment rather than writing code that is able to be run. If you want to do that, your code chunk will look something like this:
+
+```{r}
+getwd()
+```
+
+Note the difference in how the text appears -- black text means code, grey text means comments.
+
+To insert a code chunk, hold CTRL+ALT+I or Option+Command+I depending on your OS. To run the code in a code chunk, you can hit the green arrow in the top right corner (which will run all of the code in that code chunk sequentially) or you can highlight the code you'd like to run and then hit either CTRL+Enter or Command+Return. 
+
+You'll also notice several windows within RStudio. The top left window is your R Markdown file; this is where you'll be writing all of your code and answering questions. Beneath that is the console. It is possible to code here as well, but none of your work will be saved. Therefore, **you should never code in the console!** The top right window is your Environment; this is where all of the data objects you create will be stored (again, more on this later). Below that is a multipurpose window; however, we'll primarily use it to navigate through your files.
+
+Now that you're oriented, let's begin learning how to use `R`!
+
+### Commands and Arguments
+
+Commands are pieces of code that execute a certain function in `R`. Commands will always have a name followed by a set of parentheses -- for example, `getwd()` as you saw above. Typically, we will need to include arguments inside of these commands, which are additional pieces of information that `R` needs for a command to function properly. `getwd()` is an exception to this, but we'll shortly see how to add arguments. If a command requires more than one argument, each argument must be separated by a comma, and all arguments need to be contained within a single set of parentheses.
+
+### Using `R` as a Calculator
+
+`R` can be used just like a calculator by typing mathematical expressions into a code chunk. For example, you can use it for basic calculations:
+
+```{r}
+1+1
+```
+
+or more advanced expressions:
+
+```{r}
+1495 * 839 / (93 + 17)
+```
+
+When you run these code chunks, the answer will appear directly underneath it. Throughout the course, we'll ask you to use `R` as a calculator, so be sure to remember this skill!
+
+### Working Directories
+
+Your working directory is the place on your computer (or in the cloud) where the files you want to use are stored. Essentially, it is every click you take to get to the relevant files. There are two main commands you need to know regarding working directories. `getwd()` will return whatever working directory `R` is currently set to, and `setwd()` will change it to whatever working directory you specify. Here's an example:
+
+```{r}
+getwd()
+setwd(dir = "/home/jovyan/UCSB_POLS15/Section 1/")
+```
+
+Notice that the only argument we need to supply is called `dir`, and we set it equal to whatever file path we need, all within a set of quotation marks (this is how `R` recognizes plain text). For commands like `getwd()` where you only need one argument, you don't have to include the argument name itself. The code below will run exactly as it did above:
+
+```{r}
+setwd("/home/jovyan/UCSB_POLS15/Section 1/")
+```
+
+### Importing Datasets
+
+Each week, we will be importing a dataset into `R` so that we may analyze it. The process varies depending on what type of file we'll be using. In this course, we'll primarily use two file types -- `.csv` files and `.RData` files. We'll table `.RData` files for now, as today, we're using a `.csv` file. Here is how to load in today's file:
+
+```{r}
+schooldata <- read.csv(file = "schooldata.csv", # After one argument, you can hit enter to tab down to the next line or keep all arguments on a single line.
+                       header = TRUE)
+```
+
+First, you need to come up with a name for your dataset -- this is what will appear in your environment. Here, we call it "schooldata". Next, we type the assignment operator, `<-`. Whatever is on the righthand-side of the operator will be assigned to the name on the lefthand-side. Finally, we have the `read.csv()` command, which requires two arguments. The `file` argument is the name of whatever our data file is, and the `header` argument is set to `TRUE` to tell `R` that the first row of the dataset contains variable names, not actual data. Remember, your dataset needs to be saved to the working directory you specify -- otherwise, you'll get an error.
+
+### Exploring Your Dataset
+
+The first thing you'll always want to do is understand how your dataset is structured. There are a few commands we can use to do that. First, we can view the first six rows of the dataset using `head()`, with the only required argument being the name of the dataset. What does the output below show you?
+
+```{r}
+head(schooldata)
+```
+
+We can get the same information but for the last six rows of the dataset using `tail()`.
+
+```{r}
+tail(schooldata)
+```
+
+We can also use the commands `nrow()` and `ncol()` to get the number of rows (a.k.a, the number of observations / sample size) and the number of columns (a.k.a, the number of variables), respectively:
+
+```{r}
+nrow(schooldata)
+ncol(schooldata)
+```
+
+### Summary Statistics
+
+Summary statistics are useful indicators of the distribution of your variables of interest. However, you have to specify what variable from your dataset you want to use. To do that, we reformat our argument by first putting the dataset name, followed by `$`, then the name of our variable. You'll notice that once you type `$`, `R` will autopopulate the list of variables in the dataset. Here are some examples:
+
+```{r}
+range(schooldata$language_score)
+min(schooldata$language_score)
+max(schooldata$language_score)
+mean(schooldata$language_score)
+median(schooldata$language_score)
+```
+
+There is an easier way to get this information, though; we can use `summary()` to get six summary statistics for any given variable.
+
+```{r}
+summary(schooldata$language_score)
+```
+
+`summary()` also works with the entire dataset -- it will calculate summary statistics for any numeric variable, but not for character (text) variables.
+
+```{r}
+summary(schooldata)
+```
+
+### Univariate Plots
+
+While summary statistics help us understand the distribution of our variables of interest, human brains aren't very good at putting together the whole picture based on a handful of numbers. Thankfully, it's easy to generate univariate distribution plots in `R` to visually show us the entire distribution. We'll eventually learn how to make several plots, but today we'll focus on histograms using `hist()`. Below is an example with several different arguments:
+
+```{r}
+hist(x = schooldata$language_score, # This argument selects your variable
+     xlab = "Language Score", # This argument changes the label on the x-axis
+     main = "Histogram of Language Scores", # This argument changes the plot title
+     col = "blue", # This argument changes the fill color of the bins in your plot
+     border = "black", # This argument changes the border color of the bins in your plot
+     breaks = 20 # This argument changes the number of bins in your plot. Typically, it will default to 10
+     )
+```
+
+### Knitting to HTML
+
+Once you complete your coding and interpretations, you need to "knit" your `.Rmd` file into an `.html` file. To do this, hit the Knit button on the top banner of your `.Rmd` file pane. This will automatically save your work and begin running all of the code you've written from top to bottom. If your code doesn't have any errors, your `.html` file will be saved to your working directory. However, if you have an error anywhere in your document, `R` will stop running at that point and give you an error message. You'll then need to go to the relevant line(s) of code, figure out the issue, and correct it. Knitting errors are **NOT** valid excuses for late assignments -- you are expected to complete your work with enough time to diagnose and correct these issues.
+
+### Do It Yourself!
+
+Now you're going to try it on your own! Select another variable from `schooldata`. Then, calculate the mean, median, minimum, and maximum values. Finally, create a histogram of the variable with appropriate labels, and experiment with some of the aesthetic arguments (e.g., `col`, `border`, `breaks`). And don't forget to put your code in a code chunk!
+
+Place your code below:
+
+```{r}
+
+```
+
+### Looking Forward
+
+You probably feel overwhelmed after our first section; this is totally normal, coding is a difficult skill when you first start learning it! We'll review much of this material over the next two weeks, introducing a few new concepts along the way. As long as you review these files and practice your coding, you'll succeed!

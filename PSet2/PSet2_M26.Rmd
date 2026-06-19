@@ -1,0 +1,100 @@
+---
+title: "Problem Set 2 (Due 3 July 2026, 5:00 pm)"
+author: "Prof. Paasha Mahdavi, PS 15, UCSB"
+date: "Summer 2026"
+output: html_document
+---
+
+# Reminders about submitting your assignment
+
+Please make sure that you first rename and save this file as "LASTNAME-pset2.Rmd" before you do any work. Once you are finished with your problem set and have knitted your file, please remember the following steps to properly upload your assignment to Canvas:
+
+1.  In the Files pane of RStudio, click the box beside all the files you want to download (i.e., the `.Rmd` and `.html` files).
+2.  Hit the gear icon and select "export" from the dropdown menu.
+3.  Hit "download" in the dialog box.
+4.  Find the zip folder in your downloads (NOT through your browser) and unzip the folder so you can access the individual `.html` and `.Rmd` files.
+5.  Go to the Canvas submission portal and submit the `.Rmd` and `.html` files contained within the unzipped folder.
+
+You need to submit both your `.html` and `.Rmd` files for full credit. Any other file extension, such as `.htm` or `.mhtml`, cannot be read and graded. Also, please remember that you need to submit both of your individual files, NOT the zip folder. If you submitted the zip folder, please follow the steps above to correctly submit your problem set.
+
+**As a reminder, you are allowed to use generative AI to help you with your code, but it may not be used in any way for assistance with interpretive or theoretical questions.**
+
+***
+
+## Question 1.
+
+(a) Load the Fearon and Laitin data set (`fldata.RData`). What name shows up for the dataset in your environment?
+
+**ANSWER: **
+
+(b) What are the names of the variables stored in this dataset? How many variables do you have? What is your sample size, given this data set? (PLEASE DO NOT PRINT THE WHOLE DATASET IN YOUR OUTPUT!)
+
+**ANSWER: **
+
+(c) The variable `pop1` is population, measured in thousands of people. Show the sample distribution of this variable. Specifically, create a density plot, and a boxplot. Remember, plots need to be labelled.
+
+(d) Remark on the shape of the distribution (density plot) in part (c). Compute the median and mean of `pop1` and report their values in your code. Then add these values to your chart as lines, including a legend to denote each line. Comment on whether the mean and median are the same and explain why or why not. If you were writing a paper using these data, would you report the mean or median as a measure of central tendency (choose only one)? Why did you make this choice based on your analysis?
+
+**ANSWER: **
+
+In the same dataset, the variable `instab` describes whether each country in the dataset has experienced political regime instability or not. That is, whether it is a politically-unstable state (`instab` = 1), or politically-stable state (`instab` = 0). The variable `war` describes how many years from 1945 to 1999 that country had a civil war. The variable `ethfrac` is a measure of how fractionalized ethnic groups are in a given country -- specifically, it's the probability that two people randomly drawn from a given country are from the same (0) or different (1) ethnic groups.
+
+(e) What is the mean value of `war` for politically-unstable states? What is the mean value of `war` for politically-stable states? What is the standard deviation for both groups? What does this difference in standard deviations suggest about how much variation there is in war for politically-unstable versus stable states? Given these statistics, how confident are you in your ability to predict war experience for stable countries? for unstable countries? Explain your reasoning for each.
+
+**ANSWER: **
+
+(f) Summarize the `ethfrac` variable: what is the minimum and maximum? What is the mean value? What is the median value? What is the standard deviation? Which measure of central tendency would you choose to report in a hypothetical research paper? Explain your choice.
+
+**ANSWER: **
+
+(g) Say you believe that increased ethnic fractionalization causes war. In this case, what is your independent and dependent variable? Make a scatterplot that shows the relationship between these two variables, including a regression line. Describe the relationship you find. What happens to the predicted number of years in civil wars as you move from no fractionalization to the highest possible value of fractionalization? Is there anything about the scatterplot itself that makes you question whether the regression line accurately portrays the relationship between ethnic fractionalization and war? Explain.
+
+**ANSWER: **
+
+(h) Pull up your model summary and interpret your estimates for $\beta_0$ and $\beta_1$. Remember to use appropriate units!
+
+**ANSWER: **
+
+## Question 2. Theory
+
+Suppose you have a random variable $X$ with expectation $\mathbb{E}[X]=u$, and variance given by $Var[X] = s^2$. You then draw multiple observations from the same distribution. That is, you draw $X_1, X_2,..,X_n$, each a random variable wih expectation $\mathbb{E}[X] = u$ and variance $Var[X] = s^2$.
+
+**(Hint: You should use the link from Section 4 to help you correctly format your mathematical notation. You must use correct notation to receive full credit for the following questions.)**
+
+(a) When you average these random variables together, what is it called? How do you write it mathematically?
+
+**ANSWER: **
+
+(b) What is the standard deviation of these random variables? How do you write it mathematically?
+
+**ANSWER: **
+
+(c) What is $\mathbb{E}[\overline{X}]$? Explain with math and words.
+
+**ANSWER: **
+
+(d) What is $Var[\overline{X}]$? Explain with math and words.
+
+**ANSWER: **
+
+## Question 3.
+
+(a) In your own words, explain the difference between these terms and put them in a logical sequence: Estimate, Estimand, Estimator. Explain the logic behind your ordering of the terms. Give one original example of each -- in other words, your example cannot be from the textbook, lecture slides, AI, or something the instructor or TAs said.
+
+**ANSWER: **
+
+(b) If you repeatedly draw a sample and take a mean, how will the distribution of the mean change if the variance of the underlying population is small versus big? How will the distribution of the mean change if your sample size is small versus big? Explain your logic for each.
+
+**ANSWER: **
+
+## Question 4.
+
+Did you collaborate with anyone on this problem set? If so, list them here.
+
+**ANSWER: **
+
+## Question 5.
+
+Did you use generative AI on any part of this problem set? If so, identify which model you used and how you used it -- specifically, identify all questions you used it for and explain how you used it for each question.
+
+**ANSWER: **

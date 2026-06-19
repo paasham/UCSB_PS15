@@ -1,0 +1,111 @@
+---
+title: "Problem Set 5 -- Solution Set"
+author: "Hunter C. Smith"
+date: "Summer 2026"
+output: html_document
+---
+
+## Question 1: Read Experiment Research Paper
+
+Read the article, "Social Pressure and Voter Turnout: Evidence from a Large-Scale Field Experiment" by Gerber, Green & Larimer, posted on Canvas. Remember, **you may NOT use generative AI to help answer these questions.**
+
+**(1a)** The researchers have a main finding that we discussed in lecture. For this main finding, what is their independent variable? What is their dependent variable? Explain in 1-2 sentences how you identified which is which. For these variables, state the researchers' null and alternative hypotheses in both formal mathematical notation AND in a plain-English sentence. (If you need help with formatting mathematical notation, revisit the section files). Given this is an experiment, what's another term for our independent variable in this context? Why is that term specifically used for experiments rather than observational studies? **(1 point)**
+
+**ANSWER: IV is social norms & social pressue, DV is electoral turnout. This can be found in the abstract of the article or in the lecture slides. Null: Social norms don't affect electoral turnout ($H_0: \beta_1 = 0$). Alternative: Social norms affect electoral turnout ($H_A: \beta_1 \neq 0$). The IV can also be called a treatment variable in experimental studies. We can use that term because experimental studies allow researchers to control who does (not) receive the IV. In this sense, the group who receives the IV is "treated" while the control group is not. Statistically, these groups should be equivalent in all aspects other than receiving the treatment.**
+
+**(1b)** Examine Table 1. Describe what this table is communicating to the reader and explain the purpose of this type of table in experimental research -- what are the researchers trying to demonstrate and why does it matter? After looking at this table, do the researchers need to include any control variables in their regression model? Why or why not? Be sure to walk through your reasoning step-by-step. **(1 point)**
+
+**ANSWER: This is a balance table. It communicates whether the groups in the experiment significantly differ across a set of covariates. In experimental studies, it is important to show no significant differences between groups because that means our random treatment assignment process was successful. Based on this table, it doesn't seem that the researchers need to include covariates. Across all groups, the mean values of the covariates presented differ very little, if at all. While the table doesn't do any statistical testing, these small differences are unlikely to be statistically significant. Therefore, because the groups are already balanced across these covariates, they will not bias the ATE estimate and do not need to be included in the model.**
+
+**(1c)** Examine Table 2. Calculate the average treatment effect (ATE) for the "self" treatment AND one other treatment of your choice. Show your calculations for both by using `R` as a calculator. Which treatment effect is larger? Are you surprised by this? Explain why or why not. Finally, explain how you would calculate ATEs in general and what research design condition(s) you need to calculate unbiased ATEs. **(1 point)**
+
+```{r}
+34.5 - 29.7 # Self
+
+31.5 - 29.7 # Civic Duty
+
+32.2 - 29.7 # Hawthorne
+
+37.8 - 29.7 # Neighbors
+```
+
+**ANSWER: ATE for "self" treatment = 4.8 percentage points. [Other ATEs listed above -- answer for which is larger and whether they find it surprising will depend on which other ATE they calculate] In general, to calculate an ATE, you subtract the mean outcome of the control group from the mean outcome of the treatment group. The difference between the two is the ATE. To calculate an unbiased ATE, you need to be analyzing an experimental study where treatment assignment is randomized.**
+
+**(1d)** Examine Table 3. Interpret the "self treatment" coefficient in column (a) in terms of its statistical and substantive significance using the substantive meanings of the IV and DV (you do not need to interpret the coefficient value itself). Compare this coefficient to (1) the ATE you calculated in part (c), and (2) the "self treatment" coefficient when control variables (a.k.a., covariates) are included in the OLS model. What does this tell us about their research findings? Would you say this is a causal estimate? Why or why not? **(1 point)**
+
+**ANSWER: The "self treatment" coefficient in column (a) is statistically significant. The self-treatment coefficient produces the second-largest increase in voter turnout, but is not as effective as the neighbors treatment (though the difference between the two is only 0.012, which may be substantively insignificant). Coefficient comparison: 0.048 (DIM), 0.049 (OLS), 0.048 (OLS + covariates). The coefficient barely changes between the difference-in-means approach and the OLS models, even when covariates are added. These results are robust across model specifications, seemingly indicating that treatment randomization was effective and the ATE estimates are exogenous/unbiased. Because the ATEs are exogenous due to random treatment assignment, we can say that this is the causal effect of receiving the "self" treatment mailer on voter turnout.**
+
+## Question 2: Assassinations Data 
+
+```{r}
+rm(list = ls())
+setwd("/Users/hunte/Desktop/POL SW 15 Materials (M26)/PSets")
+load("leaders.RData")
+```
+
+**(2a)** How many assassination attempts are recorded in the data? How many countries experience at least two leader assassination attempts? What is the average number of assassination attempts (per year) among countries that have experienced at least one assassination? Based on these calculations, what do you conclude about the nature of political violence worldwide? Explain your logic, specifically referring to your results. **(1 point)**
+
+```{r}
+nrow(leaders)
+table(table(leaders$country)>1)
+mean(table(leaders$year))
+```
+
+**ANSWER: There are 250 assassination attempts in the dataset. 52 countries experienced at least two assassination attempts. The average number of assassination attempts per year is 2.45. Overall, it seems that political violence is somewhat widespread spatially (given that it occurs in at least 52 countries) but relatively rare temporally (given that there are only 2.45 attempts per year, on average). [Any reasonable alternative interpretation here also receives full credit]**
+
+**(2b)** Create a new binary variable named `success` that is equal to 1 if a leader dies from the attack and to 0 if the leader survives, using the `levels()` and `ifelse()` functions shown in the Lecture 9 slides as a guide. Store this new variable as part of the original data set. What is the overall success rate of leader assassination? If assassination success was truly as-if random (as the natural experiment posits), what success rate would you expect? How does the actual rate compare? Does this support or challenge the as-if randomness assumption? **(1 point)**
+
+```{r}
+lev <- levels(leaders$result)
+
+leaders$success <- ifelse(leaders$result %in% c(lev[1], lev[2], lev[3], lev[4]), 1, 0) # Students will likely use other code; that's okay as long as they capture all relevant categories
+
+mean(leaders$success)
+```
+
+**ANSWER: On average, 21.6 percent of assassination attempts are successful. If the assumption were true and we expect assassination success and failure to occur with the same probability, then the value should be close to 50 percent. However, these two outcomes may occur randomly but with unequal probability. Without knowing the probability of each outcome, the success rate above neither confirms nor denies the as-if random assumption.**
+
+**[Many students will likely say that it should be 50 percent and the average argues against as-if random assignment -- these answers should get full credit as well.]**
+
+**(2c)** Calculate the average `polityafter` score separately for successful versus failed assassination attempts. Describe your finding -- which group has the higher average polity scores, and by how much? Assume the as-if random assumption for this natural experiment holds, regardless of your conclusions in 2(b). Can we interpret the difference you found as the causal effect of successful assassination attempts on polity scores? Explain why or why not. **(1 point)**
+
+```{r}
+mean(leaders$polityafter[leaders$success == 0])
+mean(leaders$polityafter[leaders$success == 1])
+
+mean(leaders$polityafter[leaders$success == 1]) - mean(leaders$polityafter[leaders$success == 0])
+```
+
+**ANSWER: For failed attempts, the average polity score three years later is -1.89 points. For successful attempts, the average polity score three years later is -0.76 points. The difference in means between these groups is 1.13 points. Countries with successful attempts had the higher polity scores, meaning they tended to be more democratic after the assassination attempt. Assuming the as-if random assumption holds, this difference in means would be the causal effect of successful assassination attempts on polity scores. This is because, in this case, we are assuming that assassination success is as-if randomly assigned, which means that assassination success is exogenous and, therefore, uncorrelated with the error term. This makes our difference-in-means the unbiased causal effect of assassination success on polity scores.**
+
+**(2d)** Does successful leader assassination cause democratization? Answer this question by regressing `polityafter` on `success`, controlling for polity score before the assassination attempt (`politybefore`). Interpret the result on your primary independent variable, including the coefficient and significance. How does this estimate compare to the difference-in-means you calculated in 2(c)? What does this lead you to believe regarding the as-if random assumption? **(1 point)**
+
+```{r}
+mod1 <- lm(polityafter ~ success + politybefore, data = leaders)
+summary(mod1)
+```
+
+**ANSWER: Successful assassination attempts are associated with a 0.26 point increase in polity score three years post-attempt (relative to unsuccessful attempts), holding all else constant. The p-value is 0.644, which is above the standard threshold of 0.05. Therefore, we fail to reject the null hypothesis and conclude that our estimate is statistically insignificant. This estimate is much smaller than the difference-in-means estimate calculated in 2(c) -- 1.13 versus 0.26. This seems to indicate that the as-if random assumption doesn't hold, because the difference-in-means and OLS estimates are not similar, indicating that assassination success is endogenous.**
+
+**(2e)** You suspect that age might influence assassination success. Choose an appropriate analytical method *from this course* to answer this question and briefly justify why you chose this approach. Conduct your analysis and interpret your results. Based on your analysis, does it seem that age predicts assassination success? What does this mean in terms of the validity of this natural experiment? Have you identified and estimated the causal effect of age on assassination success? Why or why not? **(2 points)**
+
+```{r}
+mod2 <- lm(success ~ age, data = leaders)
+summary(mod2)
+```
+
+**ANSWER: Given that we want to examine the association between age and assassination success, an OLS model is an appropriate tool as it will give us an estimate (whether it be biased or unbiased) of the association between these variables. A one year increase in age is associated with a 0.4 percentage point increase in the probability of assassination success. The p-value is 0.04, indicating that the estimate is statistically significant and we should reject the null hypothesis. Based on this analysis, it seems that age might be an important predictor of assassination success, with the likelihood of success increasing as age increases. This provides evidence that the as-if random assumption may not hold, as age is significantly affecting assassination success, which goes against the notion that assassination success is unrelated to other variables (i.e., the error term). This is not the causal effect of age on assassination success because age is not randomly assigned. Therefore, it is not exogenous, and we cannot interpret this coefficient as a causal effect.**
+
+**[Make sure to only grant credit for methods taught in this course. Students who use AI may end up using logistic regression or t-tests.]**
+
+## Question 3.
+
+Did you collaborate with anyone on this problem set? If so, list them here.
+
+**ANSWER: -0.5 points if unanswered.**
+
+## Question 4.
+
+Did you use generative AI on any part of this problem set? If so, identify which model you used and how you used it -- specifically, identify all questions you used it for and explain how you used it for each question.
+
+**ANSWER: -0.5 points if unanswered.**

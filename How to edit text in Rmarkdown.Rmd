@@ -1,7 +1,7 @@
 ---
 title: "How to edit text in Rmarkdown"
-author: "Shanshan Lu"
-date: "April 12, 2018"
+author: "Paasha Mahdavi"
+date: "June 2026"
 output: html_document
 ---
 
@@ -24,8 +24,8 @@ knitr::opts_chunk$set(echo = TRUE)
 * 5. **hyperlinks**--Surround links with brackets, and then provide the link target in parenthese, like `[Github](www.github.com)`.
 * 6. **Starting a new paragraph**--End a line with two or more spaces. type in two $spaces$ and $return$ at the end of last sentance.  
 For example:  
-I am Shanshan Lu.
-I am a PhD student.  
-I am a PhD student.  
+I am Paasha Mahdavi.
+I am a Professor at UCSB.  
+
 
 

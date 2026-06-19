@@ -1,0 +1,112 @@
+---
+title: "Problem Set 4 (Due 17 July 2026, 5:00 pm)"
+author: "Prof. Paasha Mahdavi, PS 15, UCSB"
+date: "Summer 2026"
+output: html_document
+---
+
+# Reminders about submitting your assignment
+
+Please make sure that you first rename and save this file as "LASTNAME-pset4.Rmd" before you do any work. Once you are finished with your problem set and have knitted your file, please remember the following steps to properly upload your assignment to Canvas:
+
+1.  In the Files pane of RStudio, click the box beside all the files you want to download (i.e., the `.Rmd` and `.html` files).
+2.  Hit the gear icon and select "export" from the dropdown menu.
+3.  Hit "download" in the dialog box.
+4.  Find the zip folder in your downloads (NOT through your browser) and unzip the folder so you can access the individual `.html` and `.Rmd` files.
+5.  Go to the Canvas submission portal and submit the `.Rmd` and `.html` files contained within the unzipped folder.
+
+You need to submit both your `.html` and `.Rmd` files for full credit. Any other file extension, such as `.htm` or `.mhtml`, cannot be read and graded. Also, please remember that you need to submit both of your individual files, NOT the zip folder. If you submitted the zip folder, please follow the steps above to correctly submit your problem set.
+
+**As a reminder, you are allowed to use generative AI to help you with your code, but it may not be used in any way for assistance with interpretive or theoretical questions.**
+
+***
+
+## Question 1. Returning to GHG emission drivers
+
+Last week, we examined the relationship between GDP per capita and greenhouse gas emissions. This week, we'll be incorporating a few potential counfounding variables into a multivariate regression model. Here is the codebook for the `electricity_data.RData` dataset:
+
+Variable Name                      | Description 
+---------------------------------- | ---------------------------------------------------------
+`country`                          | Country - Geographic location. 
+`iso_code`                         | ISO code - ISO 3166-1 alpha-3 three-letter country codes. 
+`greenhouse_gas_emissions`         | Emissions from electricity generation - Measured in megatonnes of CO2 equivalents (Mt CO2e). 
+`primary_energy_consumption`       | Primary energy consumption - Measured in terawatt-hours (TWh). 
+`electricity_demand`               | Electricity demand - Measured in terawatt-hours (TWh). 
+`carbon_intensity_elec`            | Carbon intensity of electricity generation - Greenhouse gases emitted per unit of generated electricity, measured in grams of CO2 equivalents per kilowatt-hour (gCO2e / kWh). 
+`gdp_cap`                          | Gross domestic product (GDP) per capita, measured in US dollars. 
+
+(a) Before adding a few potential confounders to our model, let's examine their distributions. For both `primary_energy_consumption` and `carbon_intensity_elec`:
+- Create two binary variables for each: one that equals 1 if the country exceeds the mean, and one that equals 1 if the country exceeds the median. Create a proportion table for each binary variable (four tables total).
+- Compare the two proportion tables for each variable. What do these comparisons tell you about the skewness of each variable's distribution? Be careful not to assume that any difference between the mean and median values indicates meaningful skew -- consider the magnitude of the difference in your proportion tables relative to what you would expect from a symmetric distribution. Also, do NOT conduct any further analyses -- rely only on your proportion tables to answer this question.
+
+**ANSWER: **
+
+(b) Now let's add some potential confounders to the model. Regress `greenhouse_gas_emissions` on `gdp_cap`, `primary_energy_consumption`, and `carbon_intensity_elec` and show the `summary()` output. Interpret the results, addressing all of the following:
+- Report all coefficient estimates to 3 decimal places and explain what each estimate is communicating using its specific value and appropriate units.
+- For each independent variable, report the associated $p$-value ad evaluate it against the standard significance threshold $\alpha$. Provide conclusions regarding statistical significance and the null hypothesis.
+- Report the model's $R^2$ to 3 decimal places. How does this compare to the $R^2$ from last week's bivariate model? What does this comparison tell you about the explanatory power of the two models?
+- Compare your estimates from last week to the new multivariate model. Specifically, evaluate the robustness of the relationship between `gdp_cap` and `greenhouse_gas_emissions`. Use `R` to calculate the difference between the two $\beta_1$ estimates (show your work in a code chunk). Assess robustness along the dimensions discussed in lecture and section. What do you conclude?
+
+**ANSWER: **
+
+(c) After accounting for confounders, can the coefficient estimate for `gdp_cap` from (b) be interpreted as the causal effect of GDP per capita on GHG emissions? Thoroughly explain why or why not. Other than those accounted for in (b), do any potential confounders of the relationship between `gdp_cap` and `greenhouse_gas_emissions` remain? Definitively argue for one stance. If you argue that additional confounders remain, propose one specific variable, explain how it relates to the other variables in your model, and identify the direction of bias it would create on your estimate for `gdp_cap`. If you argue that no additional confounders remain, explain your reasoning thoroughly.
+
+**ANSWER: **
+
+## Question 2. Substantive Interpretation 
+
+Write a brief summary (400 words or less) of your greenhouse gas emissions analyses in Problem Set 3. Your summary should address all of the following:
+
+- Discuss the robustness of the coefficient on `gdp_cap` between the bivariate and multivariate models. What do your conclusions vis-à-vis robustness suggest about the relationship between GDP and GHG emissions? 
+- Discuss whether the magnitude of the `gdp_cap` coefficient in your multivariate model is meaningful in a practical sense. Is this effect size relevant for policy purposes? Explain your reasoning.
+- Using your multivariate model from part (b), predict GHG emissions for Sweden and Finland. Show your calculations in a code chunk -- do NOT open the dataset to get variable values. How do these predictions compare to (1) the actual observed emissions for each country, and (2) the predictions you made using the bivariate model in part (c)? Explain any differences that may or may not arise.
+
+Write in paragraph form using complete sentences. **You may use generative AI ONLY for the coding component, NOT for verbal answers.**
+
+**ANSWER: **
+
+## Question 3. Causes of Corruption
+
+In an article in *Comparative Political Studies*, “Institutions and the resource curse: Evidence from cases of oil-related bribery,” Prof. Mahdavi examines possible determinants of prosecuted corruption across oil-rich countries. The dataset  is `oil-corruption.RData` and below is an abbreviated list of the variables.
+
+Variable Name  | Description 
+------------- | ------------- 
+`bribes` | amount of oil-related bribery caught by the Department of Justice in a given country, measured in dollars.
+`lbribes` | logged version of the bribes variable.
+`NOC` | 1 if the country has a regulatory national oil company (NOC), 0 otherwise.
+`GDP` | logged GDP per capita.
+`Oil` | logged oil income per capita.
+`Polity` | polity score, ranging from -10 to +10.
+`PressFreedom` | Freedom of the Press score, ranging from 0 (least restrictions on free press) to 100 (most restrictions on free press).
+`Population` | logged population.
+`UN` | United Nations voting alignment, measuring how often the country votes with the USA at the UN General Assembly.
+
+As usual, load your data (with code) before beginning the questions below. Remember, **you may use generative AI to help with your coding, but all verbal answers must be generated without the use of AI.**
+
+**(3a)** Explore the regulatory NOC variable. What kind of variable is this? Without using any code, what are the minimum and maximum values of this variable? How do you know? What is the mean value of NOC? (Do not use `summary()` to calculate this -- use a command that returns *only* the mean.) Interpret this value -- what does the mean tell you about the proportion of countries in the dataset that have a regulatory NOC?
+
+**ANSWER: **
+
+**(3b)** You want to understand what predicts bribery across oil-rich countries. Calculate the average bribery level for countries with and without regulatory NOCs, and report the difference-in-means. Does it appear that having a regulatory NOC is associated with more or less bribery? Does this difference-in-means estimate represent the (causal) ATE of NOCs on bribery? Explain.
+
+**ANSWER: **
+
+**(3c)** Run a regression to predict *logged bribery* (the variable `lbribes`) using `NOC`, `GDP`, `Polity`, `Population`, and `PressFreedom`. Interpret the results in terms of statistical significance -- you do NOT need to interpret the coefficients. For the statistically significant predictors, comment on the magnitude of their effects -- which variable has the largest substantive impact on bribery? Report and interpret the model's $R^2_j$ value, and explain any differences compared to $R^2$. Why do the degrees of freedom drop after running the model?
+
+**ANSWER: **
+
+**(3d)** It could be that oil is a potential cause of corruption: i.e., that countries with more oil are likely to be more corrupt. One proxy for oil wealth is oil income per capita. Add the `Oil` variable to your model and display the model summary. Is the coefficient on `Oil` statistically significant? What does the coefficient suggest about the relationship between oil income per capita and corruption? Compare the coefficients and p-values of the variables from 3(c) to these variables' coefficients and p-values in this model. Did any of them change in terms of direction, magnitude, or significance? What does this suggest about your original estimates for these variables? Would you describe these results as robust? Explain your logic.
+
+**ANSWER: **
+
+## Question 4.
+
+Did you collaborate with anyone on this problem set? If so, list them here.
+
+**ANSWER: **
+
+## Question 5.
+
+Did you use generative AI on any part of this problem set? If so, identify which model you used and how you used it -- specifically, identify all questions you used it for and explain how you used it for each question.
+
+**ANSWER: **
