@@ -55,13 +55,13 @@ Your working directory is the place on your computer (or in the cloud) where the
 
 ```{r}
 getwd()
-setwd(dir = "/home/jovyan/UCSB_POLS15/Section 1/")
+setwd(dir = "/home/jovyan/UCSB_PS15/Section 1/")
 ```
 
 Notice that the only argument we need to supply is called `dir`, and we set it equal to whatever file path we need, all within a set of quotation marks (this is how `R` recognizes plain text). For commands like `getwd()` where you only need one argument, you don't have to include the argument name itself. The code below will run exactly as it did above:
 
 ```{r}
-setwd("/home/jovyan/UCSB_POLS15/Section 1/")
+setwd("/home/jovyan/UCSB_PS15/Section 1/")
 ```
 
 ### Importing Datasets
